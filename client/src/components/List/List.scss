@@ -1,0 +1,327 @@
+@import '../../base_styles/colors';
+@import '../../base_styles/buttons';
+
+.listWrapper{
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    min-width: 300px;
+    width: 100%;
+    position: relative;
+    height: unset;
+    min-height: -webkit-fill-available;   
+}
+
+.roomCodeWrapper{
+    position: absolute;
+    z-index: 1;
+    padding-top: 20px;
+    top: 80px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    font-size: x-large;
+
+    @media screen and (min-width: 800px){
+        max-width: 800px;
+        left: 0px;
+        right: 0px;
+        margin-right: auto;
+        margin-left:auto;
+    }
+    
+    .roomName{
+        padding-left: 20px;
+        width: 70%;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        hyphens: auto;
+        display: flex;
+        align-items: center;
+        @media (hover: hover){
+            &:hover{
+                text-decoration: underline;
+            }
+        }
+        .btnIcon{
+            padding-left: unset;
+            padding-left: 10px;
+            font-size: large;
+        }
+    }
+    .roomCode{
+        width: 30%;
+        padding-right: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        
+        &:hover{
+            text-decoration: underline;
+        }
+        
+    }
+    .roomCodeIcon{
+        padding-right: 10px;
+    }
+
+    @media screen and (max-width: 425px) {
+        font-size: large;
+    }
+
+    .copiedFlag{
+        font-size: medium;
+        position: absolute;
+        top: 60px;
+        right: 20px;
+    }
+}
+
+.titleBarWrapper{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    width: 100%;
+    height: 100px;
+    
+    @media screen and (min-width: 800px){
+        max-width: 800px;
+        left:0px;
+        right:0px;
+        margin: auto;
+    }
+    
+    &.empty{
+        display:none;
+        position: absolute;
+        top: 150px;
+    }
+    
+    .roomsToolWrapper{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        width: 100%;
+        font-size: x-large;
+        button{
+            height: 50%;
+            font-size: large;
+            justify-content: center;
+            width: 160px;
+        }
+    }
+
+    .titleButtonWrap{
+        display: flex;
+        align-items: center;
+        height: 100%;
+        width: 50%;
+        margin-right: 0px;
+        
+        button{
+            height: 50px;
+            font-size: medium;
+            width:100%;
+            max-width: 160px;
+            padding:0px;
+            display: flex;
+            padding-right: 5px;
+        }
+
+        .buttonTxt{
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 80%;
+        }
+
+        .buttonIconWrap{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 50px;
+                width:20%;
+                padding:0px !important;
+            .buttonIcon{
+                font-size: x-large;
+            }
+        }
+
+        &.checkAll{
+            justify-content: flex-start; 
+            padding-right:10px;
+            @media screen and (max-width: 800px){
+                padding-left: 20px;
+            }
+
+            .checkBtn{
+                &:disabled{
+                    background-color: darken($yellow, 10%);
+                }
+            }
+        }
+
+        &.print{
+            justify-content: flex-end; 
+            padding-left:10px;
+            @media screen and (max-width: 800px){
+                padding-right: 20px;
+            }
+        }
+    }
+
+    .changeName{
+        display: flex;
+        align-items: center;
+        height: 100%;
+        width: 100%;
+        margin-right: 0px;
+        justify-content: flex-end;
+        padding-right: 20px;
+
+        button{
+            padding-left: 20px;
+            height: 50%;
+            font-size: medium;
+            justify-content: center;
+            max-width: 160px;
+        }
+    }
+}
+
+.btnIcon{
+    font-size: x-large;
+    padding-left:20px;
+}
+
+.listFooter{
+    background-color: #DDDDDD;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 80px;
+    font-size: x-large;
+    bottom: unset;
+    position: fixed;
+    top: 0px;
+    z-index: 2;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 0px;
+    border-top-left-radius: 0px;
+    
+    .footerDiv{
+        height:100%;
+        width:100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        button{
+            height: 70%;
+            width: 90%;
+            font-size: large; 
+            justify-content: center;
+
+            .btnIcon{
+                margin-left: 0px;
+                padding-left: 0px;
+            }
+        }
+    }
+}
+
+.emptyListPlaceholder{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    font-size: larger;
+    position: fixed;
+    height: 100%;
+    top:0px;
+    bottom: 0px;
+    .desktopHotkeys{
+        &.mobile{
+            display: none;
+        }
+    }
+    .noItems{
+        font-size: x-large;
+    }
+    .tips{
+        font-size: medium;
+        padding-left: 15px;
+        padding-right: 15px;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        hyphens: auto;
+        text-align: center;
+        &.title{
+            margin-top: 10px;
+            text-decoration: underline;
+        }
+        &.tip{
+            display: flex;
+            justify-content: center;
+            padding-top: 5px;
+            button{
+                margin-right: 5px;
+                border-radius: 3px;
+            }
+            .btnIcon{
+                font-size: medium;
+                padding: unset;
+            }
+        }
+        @media screen and (max-width: 425px) {
+            font-size: small;
+            &.tip{
+                .btnIcon{
+                    font-size: small;
+                }
+            }
+        }
+    }
+}
+
+.list{
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 10px 10px 10px 10px;
+    margin-bottom: 0px;
+    margin-top:150px;
+    
+
+    @media screen and (min-width: 800px){
+        width:100%;
+        max-width: 800px;
+        left:0px;
+        right:0px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .categoryWrapper{
+        width: 100%;
+    }
+
+    .categoryTitle{
+        display: inline-block;
+        font-size: larger;
+        font-style: italic;
+        padding: 0px 10px 0px 10px;
+        border-bottom-color: black;
+        border-bottom-style: solid;
+        box-shadow: 0 0 black;
+    }
+}

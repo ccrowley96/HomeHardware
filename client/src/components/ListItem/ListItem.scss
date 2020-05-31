@@ -1,0 +1,146 @@
+@import '../../base_styles/colors.scss';
+@import '../../base_styles/buttons';
+
+.listItem{
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    padding: 5px 5px 5px 5px;
+    height: auto;
+}
+
+.listContent{
+    padding-left: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: x-large;
+    height: 100%;
+    flex-wrap: wrap;
+    overflow-wrap: anywhere;
+}
+
+.listDate{
+    font-size: small;
+}
+.listCategory{
+    font-size: small;
+    margin-bottom: 10px;
+}
+
+.listItemWrapper{
+    width: 100%;
+    display: flex;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background-color: $lightBlue;
+    border-radius: 5px;
+    flex-direction: column;
+    position: relative;
+
+    &.checked{
+        background-color: #AAAAAA;
+    }
+}
+
+.listToolsWrapper{
+    padding: 5px 5px 5px 5px;
+    width: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.listItemWrapper{   
+    .listToolsWrapper{
+        width: 100%;
+        padding-bottom: 10px;
+    }
+}
+
+.listToolsWrapper{
+    .tool{
+        height: 80%;
+        margin-right:10px;
+        margin-left: 10px;
+        font-size: large;
+        width: unset;
+    }
+}
+
+.listToolsWrapper{
+    .listTools{
+        display: flex;
+        flex-direction: row;
+        width:30%;
+    }
+    .listInfo{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-end;
+        padding-right:20px;
+        width: 70%;
+
+        .edited{
+            margin-block-start:0px;
+            margin-block-end: 0px;
+        }
+    }
+    & .deleteTool{
+        background-color: $red;
+        border-radius: 10px;
+    }   
+}
+
+.listToolsWrapper {
+    & .checkTool{
+        background-color: $green;
+        border-radius: 10px;
+    }
+
+    .listItemToolIcon{
+        font-size: xx-large;
+        &.deleteIcon{
+            color: $red;
+            @media (hover: hover){
+                &:hover{
+                    color: darken($red, 30%);
+                }
+            }
+        }
+
+        &.checkIcon{
+            @media (hover: hover){
+                &:hover{
+                    color: white;
+                }
+            }
+        }
+    }
+}
+
+.editBtn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+
+    font-size: large;
+
+    @media (hover: hover){
+        &:hover{
+            background-color: darken($lightBlue, 6%);
+        }
+    }
+
+    margin-left: 0px;
+    position: absolute;
+    top:10px;
+    right: 10px;
+}
