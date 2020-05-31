@@ -152,6 +152,8 @@
     margin-bottom:20px;
     background-color: $lightBlue;
 
+    
+
     .joinRoomClickRegion{
         position: absolute;
         width: calc(100% - 50px);
@@ -159,7 +161,13 @@
         margin-left: -5px;
     }
     &:hover{
-        background-color: darken($lightBlue, 20%);
+        background-color: darken($lightBlue, 10%);
+    }
+    &.orange{
+        background-color: $orange;
+        &:hover{
+            background-color: darken($orange, 10%);
+        }
     }
     
     .roomName{

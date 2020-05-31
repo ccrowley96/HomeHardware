@@ -78,6 +78,25 @@ class Rooms extends React.Component{
             // Update local storage
             localStorage.setItem('rooms', JSON.stringify(filteredLocalRooms));
         }
+
+        // Add todays rooms to local storage rooms
+        let todaysResponse = await fetch('/api/room/getTodaysRooms', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        let todaysRooms = await todaysResponse.json();
+        console.log(todaysRooms);
+
+        localRooms = JSON.parse(localStorage.getItem('rooms'));
+        for(let room of todaysRooms.matchingRooms){
+            if(localRooms && localRooms.findIndex(el => el.roomId === room._id) !== -1) continue;
+            if(localRooms) localRooms.push({roomId: room._id, roomCode: room.roomCode, roomName: room.roomName});
+            else localRooms = [{roomId: room._id, roomCode: room.roomCode, roomName: room.roomName}]
+        }
+        localStorage.setItem('rooms', JSON.stringify(localRooms));
+       
         this.updateRooms();
     }
 
@@ -122,7 +141,7 @@ class Rooms extends React.Component{
         let roomValidated = await response.json();
         if(roomValidated.match == null){
             //Flag room not found
-            this.setState({joinRoomInfo: 'List not found'});
+            this.setState({joinRoomInfo: 'List code invalid'});
         } else{
 
             let storageToSet = JSON.parse(localStorage.getItem('rooms'));
@@ -195,7 +214,7 @@ class Rooms extends React.Component{
                                     onChange={(e) => this.handleJoinInputChange(e)}
                                     placeholder={"Enter code..."}
                                     className="joinRoomInput"
-                                    maxLength={6}
+                                    maxLength={7}
                                 >
                                 </input>
                                 <div className="joinRoomInfo">{this.state.joinRoomInfo}</div>
@@ -210,11 +229,11 @@ class Rooms extends React.Component{
                     </form>
                 </div>
                 
-                <h2>Grocery Lists</h2>
+                <h2>Today's Lists</h2>
                 { 
                     (this.state.rooms && this.state.rooms.length !== 0) ? this.state.rooms.map(room => {
                         return (
-                            <RoomItem 
+                            <RoomItem
                                 key={room.roomId}
                                 roomName={room.roomName}
                                 room={room} 
@@ -251,7 +270,7 @@ class RoomItem extends React.Component{
 
     render(){
         return(
-            <div key={this.props.room.roomId} className="roomWrapper" tabIndex={0}>
+            <div key={this.props.room.roomId} className={`roomWrapper${this.props.room.roomName[0] === 'W' ? ' orange' : ' blue'}`} tabIndex={0}>
                 <div className="joinRoomClickRegion"
                     onClick={() => this.props.joinMyRoom(this.props.room.roomId, this.props.room.roomCode, this.props.room.roomName)}>
                 </div>

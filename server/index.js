@@ -4,6 +4,7 @@ const API = require('./api/index');
 const cors = require('cors');
 const dotenv = require('dotenv').config();
 const path = require('path');
+const utils = require('./api/utils');
 
 const app = express();
 const port = process.env.PORT;
@@ -45,6 +46,9 @@ app.get('/*', function(req, res) {
 //Start Listening
 app.listen(port, () => {
     console.log(`List App server running on port: ${port}!`);
+    // server ready to accept connections here
+    // Create today's lists / check if already made
+    utils.createTodaysLists();
+    utils.scheduleListCreator();
   }
 );
-

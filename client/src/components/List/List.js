@@ -262,10 +262,11 @@ class List extends React.Component{
                     </div>
                 </div>
                 <div className="roomCodeWrapper">
-                    <div className="roomName" onClick={() => this.setState({editNameOpen: true})}
+                    <div className="roomName"
                         title={'Edit list name'}
                     >
-                        {JSON.parse(localStorage.getItem('activeRoom')).roomName}<GrEdit className="btnIcon"/> 
+                        {JSON.parse(localStorage.getItem('activeRoom')).roomName}
+                        {/* <GrEdit className="btnIcon"/>  */}
                     </div>
                     <CopyToClipboard 
                         text={`${process.env.NODE_ENV === 'development' ? window.location.href : 'https://www.grocerylist.us/'}rooms/${this.props.roomCode}`}

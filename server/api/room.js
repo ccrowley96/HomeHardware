@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const randomstring = require('randomstring');
 const {Item, Room } = require('../db/db_index');
+const utils = require('./utils');
+const moment = require('moment-timezone');
 const {validateRoom, validateItem, updateExpireTime, secondsUntilExpire} = require('./middleware');
 
 var ObjectId = require('mongoose').Types.ObjectId; 
@@ -79,12 +81,6 @@ router.post('/getMatchingIds', async (req, res, next) => {
             if(match) matchingRooms.push(match);
         }
 
-        // Update expireAt on all matching rooms to current time + expireTime
-        for(let room of matchingRooms){
-            let expireAt = new Date(Date.now() + secondsUntilExpire);
-            await Room.updateOne({"_id": new ObjectId(room._id.toString())}, {expireAt: expireAt});
-        }
-
         res.status(200);
         res.json({
             title: 'Rooms',
@@ -106,7 +102,7 @@ router.post('/getRoomByCode', async (req, res, next) => {
         res.status(400);
         res.send('Missing or incorrect roomCode in body');
     }
-    
+
     let matchingRooms = [];
     // fetch matching ids from db and return those rooms
     try{
@@ -118,12 +114,72 @@ router.post('/getRoomByCode', async (req, res, next) => {
                 match
             });
         } else{
-            res.status(404);
+            let sendErrorStatus = () => {
+                res.status(404);
+                res.json({
+                    title: 'Rooms',
+                    match: null
+                })
+            }
+            // Validate that code is OK TODO
+            if(roomCode.length !== 7 && ['c', 'w'].indexOf(roomCode[0]) === -1){
+                sendErrorStatus();
+                return;
+            }
+
+            let dateString = roomCode.slice(1);
+            let dateFormat = 'MMDDYY';
+            let momentObj = moment(dateString, dateFormat);
+            let isValidDate = moment(momentObj, dateFormat, true).isValid();
+
+            if(!isValidDate){
+                sendErrorStatus();
+                return;
+            }
+
+            let dispDate = moment(dateString, dateFormat).format('MM/DD/YY');
+
+            // Create room
+            let expireAt = new Date(Date.now() + utils.secondsInYear);
+            let room = new Room({
+                roomCode, 
+                expireAt: expireAt, 
+                roomName: roomCode[0] === 'c' ? `C ${dispDate}` : `W ${dispDate}`});
+            // Save new room using roomCode
+            let roomCreated;
+            try {
+                roomCreated = await room.save();
+            } catch (err) {
+                console.log(err);
+            }
+            res.status(200);
             res.json({
                 title: 'Rooms',
-                match: null
+                match: roomCreated
             })
         }
+    } catch(err){
+        console.log(err);
+        res.sendStatus(500);
+    }
+});
+
+// Fetch today's rooms
+router.post('/getTodaysRooms', async (req, res, next) => {
+    let matchingRooms = [];
+    let todaysLaunchCodes = utils.getTodaysListCodes();
+    // fetch matching ids from db and return those rooms
+    try{
+        for(let storeCode of todaysLaunchCodes){
+            let match = await Room.findOne({roomCode: storeCode});
+            if(match) matchingRooms.push(match);
+        }
+
+        res.status(200);
+        res.json({
+            title: 'Rooms',
+            matchingRooms
+        });
     } catch(err){
         console.log(err);
         res.sendStatus(500);
