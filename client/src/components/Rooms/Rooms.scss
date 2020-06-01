@@ -152,7 +152,9 @@
     margin-bottom:20px;
     background-color: $lightBlueTrans;
 
-    
+    @media screen and (max-width: 375px){
+        font-size: medium;
+    }
 
     .joinRoomClickRegion{
         position: absolute;

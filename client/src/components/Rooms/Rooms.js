@@ -228,7 +228,7 @@ class Rooms extends React.Component{
                     </form>
                 </div>
                 
-                <h2>Today's Lists</h2>
+                <h2>Home Hardware Lists</h2>
                 { 
                     (this.state.rooms && this.state.rooms.length !== 0) ? this.state.rooms.map(room => {
                         return (
@@ -269,7 +269,7 @@ class RoomItem extends React.Component{
 
     render(){
         return(
-            <div key={this.props.room.roomId} className={`roomWrapper${this.props.room.roomName[0] === 'W' ? ' orange' : ' blue'}`} tabIndex={0}>
+            <div key={this.props.room.roomId} className={`roomWrapper${this.props.room.roomName[0] === 'W' ? ' orange' : ' lightblue'}`} tabIndex={0}>
                 <div className="joinRoomClickRegion"
                     onClick={() => this.props.joinMyRoom(this.props.room.roomId, this.props.room.roomCode, this.props.room.roomName)}>
                 </div>
