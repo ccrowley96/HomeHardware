@@ -174,7 +174,7 @@ class Rooms extends React.Component{
 
     async displayNotes(){
         //Note: Lists will expire in 30 days if not used
-        let noteInterval = 8500;
+        let noteInterval = 10000;
         let notes = [
             {note: 'Lists will expire in 30 days if not used', interval: noteInterval},
             {note: 'Add this app to your phone homescreen from the browser menu', interval: noteInterval},
@@ -182,7 +182,7 @@ class Rooms extends React.Component{
             {note: 'You can print your lists!', interval: noteInterval},
             {note: 'Careful: deleting a list also deletes the list for anyone who has access', interval: noteInterval},
             {note: 'Copy a list link and send it to anyone.  They will automatically have access.', interval: noteInterval},
-            {note: 'If you want to look at the list for Carp on 12/25/20, enter: c122520 and press join.  You can look up any date this way!', interval: 20000}
+            {note: 'If you want to look at the list for Carp on 12/25/20, enter: c122520 and press join.  You can look up any date this way!', interval: noteInterval}
         ]
         // Shuffle notes and add empty final note
         notes = (notes.sort(() => Math.random() - .5))
