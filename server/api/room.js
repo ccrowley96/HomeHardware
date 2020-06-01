@@ -98,11 +98,13 @@ router.post('/getRoomByCode', async (req, res, next) => {
     let roomCode;
     try{
         roomCode = req.body.roomCode;
+        if(!roomCode) throw new Error();
     } catch(err){
         res.status(400);
         res.send('Missing or incorrect roomCode in body');
+        return;
     }
-
+    roomCode = roomCode.toLowerCase();
     let matchingRooms = [];
     // fetch matching ids from db and return those rooms
     try{
@@ -122,7 +124,7 @@ router.post('/getRoomByCode', async (req, res, next) => {
                 })
             }
             // Validate that code is OK TODO
-            if(roomCode.length !== 7 && ['c', 'w', 'C', 'W'].indexOf(roomCode[0]) === -1){
+            if(roomCode.length !== 7 || ['c', 'w', 'C', 'W'].indexOf(roomCode[0]) === -1){
                 sendErrorStatus();
                 return;
             }

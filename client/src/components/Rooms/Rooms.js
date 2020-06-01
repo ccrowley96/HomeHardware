@@ -129,7 +129,7 @@ class Rooms extends React.Component{
     }
 
     async joinRemoteRoom(roomCode = null){
-        let remoteRoomCode = roomCode ? roomCode : this.state.joinRoomVal;
+        let remoteRoomCode = (roomCode ? roomCode : this.state.joinRoomVal).toLowerCase();
         // Check if room exists in database
         let response = await fetch('/api/room/getRoomByCode', {
             method: 'POST',
