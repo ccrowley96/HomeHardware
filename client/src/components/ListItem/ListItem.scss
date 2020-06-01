@@ -4,8 +4,8 @@
 .listItem{
     display: flex;
     flex-direction: column;
-    width: 80%;
-    padding: 5px 5px 5px 5px;
+    padding: 10px 10px 10px 10px;
+    // padding-right: 10px;
     height: auto;
 }
 
@@ -16,7 +16,7 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    font-size: x-large;
+    font-size: large;
     height: 100%;
     flex-wrap: wrap;
     overflow-wrap: anywhere;
@@ -47,7 +47,6 @@
 
 .listToolsWrapper{
     padding: 5px 5px 5px 5px;
-    width: 20%;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -55,7 +54,6 @@
 
 .listItemWrapper{   
     .listToolsWrapper{
-        width: 100%;
         padding-bottom: 10px;
     }
 }
@@ -65,8 +63,18 @@
         height: 80%;
         margin-right:10px;
         margin-left: 10px;
-        font-size: large;
-        width: unset;
+        font-size: medium;
+        width: 125px;
+        position: relative;
+        display: flex;
+        align-items: center;
+
+        .toolLabel{
+            // position: absolute;
+            // left: -10px;
+            // top:-15px;
+            // color: red;
+        }
     }
 }
 
@@ -74,19 +82,22 @@
     .listTools{
         display: flex;
         flex-direction: row;
-        width:30%;
+        width: calc(100% - 40px);
     }
     .listInfo{
         display: flex;
         flex-direction: row;
         align-items: center;
         justify-content: flex-end;
-        padding-right:20px;
-        width: 70%;
+        // padding-right:20px;
+        // width: 20%;
 
         .edited{
             margin-block-start:0px;
             margin-block-end: 0px;
+        }
+        .editTool{
+            font-size: x-large;
         }
     }
     & .deleteTool{
@@ -119,28 +130,42 @@
                 }
             }
         }
+        @media screen and (min-width: 370px){
+            padding-right: 10px;
+        }
+    }
+}
+
+.deleteBtnTool{
+    display: flex;
+    justify-content: center;
+    width: 50px;
+    margin-left: 0px;
+    margin-right:0px;
+    padding-right: 0px;
+    position: absolute;
+    bottom:50px;
+    right: 5px;
+    font-size: large;
+
+    font-size: xx-large;
+    &.deleteIcon{
+        color: $red;
+        @media (hover: hover){
+            &:hover{
+                color: darken($red, 30%);
+            }
+        }
     }
 }
 
 .editBtn{
     display: flex;
     justify-content: center;
-    align-items: center;
-
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-
-    font-size: large;
-
-    @media (hover: hover){
-        &:hover{
-            background-color: darken($lightBlue, 6%);
-        }
-    }
-
+    width: 50px;
     margin-left: 0px;
     position: absolute;
-    top:10px;
-    right: 10px;
+    bottom:10px;
+    right: 5px;
+    font-size: x-large;
 }

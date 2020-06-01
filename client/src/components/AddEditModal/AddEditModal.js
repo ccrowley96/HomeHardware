@@ -8,20 +8,17 @@ class AddEditModal extends React.Component{
         
         if(this.props.populate){
             this.state = {
-                itemDesc: props.populate.content
-            }
-            if(!(groceryCategories.includes(props.populate.category))){
-                this.state['itemCat'] = 'Other';
-                this.state['customCat'] = props.populate.category
-            } else{
-                this.state['itemCat'] = props.populate.category;
-                this.state['customCat'] = '';
+                invoice: this.props.populate.invoice,
+                address: this.props.populate.address,
+                name: this.props.populate.name,
+                description: this.props.populate.description
             }
         } else{
             this.state = {
-                itemDesc: '',
-                itemCat: groceryCategories[0],
-                customCat: ''
+                invoice: '',
+                address: '',
+                name: '',
+                description: ''
             }
         }
 
@@ -37,10 +34,28 @@ class AddEditModal extends React.Component{
         document.body.style.overflow = 'unset';
     }
 
-    handleDescChange(event) {
+    handleInvoiceChange(event) {
         let formError = this.state.formError
         if(event.target.value !== '') formError = '';
-        this.setState({itemDesc: event.target.value, formError});
+        this.setState({invoice: event.target.value, formError});
+    }
+
+    handleNameChange(event) {
+        let formError = this.state.formError
+        if(event.target.value !== '') formError = '';
+        this.setState({name: event.target.value, formError});
+    }
+
+    handleDescriptionChange(event) {
+        let formError = this.state.formError
+        if(event.target.value !== '') formError = '';
+        this.setState({description: event.target.value, formError});
+    }
+
+    handleAddressChange(event) {
+        let formError = this.state.formError
+        if(event.target.value !== '') formError = '';
+        this.setState({address: event.target.value, formError});
     }
 
     handleCatChange(event){
@@ -54,27 +69,27 @@ class AddEditModal extends React.Component{
     handleSubmit(event) {
         event.preventDefault();
 
-        if(this.state.itemDesc === ''){
+        if(this.state.invoice === ''){
             this.setState({formError: 'Description cannot be empty'})
             return;
         }
-        if(this.state.itemCat === 'Other'){
-            if(this.state.customCat === ''){
-                this.setState({formError: 'Custom category cannot be empty'})
-                return;
-            }
-            this.props.addItem({
-                content: this.state.itemDesc,
-                category: this.state.customCat
-            })
-        } else{
-            this.props.addItem({
-                content: this.state.itemDesc,
-                category: this.state.itemCat
-            })
+        if(this.state.address === ''){
+            this.setState({formError: 'Address cannot be empty'})
+            return;
         }
-
-        this.setState({itemDesc: '', customCat: ''});
+        if(this.state.name === ''){
+            this.setState({formError: 'Name cannot be empty'})
+            return;
+        }
+        
+        this.props.addItem({
+            name: this.state.name,
+            address: this.state.address,
+            description: this.state.description,
+            invoice: this.state.invoice
+        })
+        
+        this.setState({name: '', address: '', description: '', invoice: ''});
     }
 
     render(){
@@ -89,42 +104,43 @@ class AddEditModal extends React.Component{
                             <div className="addForm">
                                 <div className="addFormItemDesc">
                                     <label>
-                                        Item Description
+                                        Invoice #
                                     </label>
-                                    <input className="formItem" type="text" name="itemDesc" 
+                                    <input className="formItem" type="text" name="invoice" 
                                         ref={(input) => { this.itemInput = input; }} 
-                                        value={this.state.itemDesc} 
-                                        onChange={(e) => this.handleDescChange(e)}
-                                        placeholder={'oreos...'} 
+                                        value={this.state.invoice} 
+                                        onChange={(e) => this.handleInvoiceChange(e)}
+                                        placeholder={'Invoice #'} 
                                         maxLength={140}
-                                        // TODO add random placeholder item generation
                                     />
                                     <label>
-                                        Grocery Category (optional)
+                                        Address
                                     </label>
-                                    <select className = "formItem" type="text" name="itemCat"
-                                        value={this.state.itemCat} 
-                                        onChange={(e) => this.handleCatChange(e)}
-                                    >
-                                        {groceryCategories.map((category) => {
-                                            return (<option key={category}>{category}</option>)
-                                        })}
-                                    </select>
-                                    {
-                                        this.state.itemCat === 'Other' ? 
-                                            <div>
-                                                <label>
-                                                    Custom Category
-                                                </label>
-                                                <input className="formItem customCategory" type="text" name="customCat"
-                                                    value={this.state.customCat} 
-                                                    onChange={(e) => this.handleCustomChange(e)}
-                                                    placeholder={'Other'}
-                                                    maxLength={26}
-                                                />
-                                            </div>
-                                        : null
-                                    }
+                                    <input className="formItem" type="text" name="address" 
+                                        value={this.state.address} 
+                                        onChange={(e) => this.handleAddressChange(e)}
+                                        placeholder={'Address'} 
+                                        maxLength={140}
+                                    />
+                                    <label>
+                                        Name
+                                    </label>
+                                    <input className="formItem" type="text" name="name" 
+                                        value={this.state.name} 
+                                        onChange={(e) => this.handleNameChange(e)}
+                                        placeholder={'Jim'} 
+                                        maxLength={140}
+                                    />
+                                    <label>
+                                        Description
+                                    </label>
+                                    <input className="formItem" type="text" name="description" 
+                                        value={this.state.description} 
+                                        onChange={(e) => this.handleDescriptionChange(e)}
+                                        placeholder={'Optional Details'} 
+                                        maxLength={140}
+                                    />
+                                    
                                     <div className ="formError">{this.state.formError}</div>
                                 </div>
                             </div>

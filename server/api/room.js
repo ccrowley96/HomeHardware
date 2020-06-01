@@ -232,19 +232,23 @@ router.get('/:id/list', validateRoom, async (req, res, next) => {
 
 //POST new list item
 router.post('/:id/list', validateRoom, async (req, res, next) => {
-    let roomId = req.params.id;;
+    let roomId = req.params.id;
     
-    if(!req.body.content || !req.body.category){
+    if(!req.body.invoice || !req.body.address || !req.body.name){
         res.status(400);
-        res.send('Incorrect request body (see category and content)');
+        res.send('Incorrect request body (see invoice and address and name)');
         return;
     }
+
+    let itemObj = {
+        name: req.body.name,
+        address: req.body.address,
+        invoice: req.body.invoice,
+        description: req.body.description
+    }
         
-    // Create new item
-    const item = new Item({
-        content: req.body.content,
-        category: req.body.category
-    });
+    const item = new Item(itemObj);
+
     try {
         await Room.findByIdAndUpdate(new ObjectId(roomId),
             {$push: {roomList: item}}
@@ -261,16 +265,18 @@ router.put('/:id/list/:item_id', validateRoom, validateItem, async (req, res, ne
     let roomId = req.params.id;
     let itemId = req.params.item_id;
     
-    if(!req.body.content || !req.body.category){
+    if(!req.body.address || !req.body.name || !req.body.invoice){
         res.status(400);
-        res.send('Incorrect request body (body needs category and content)');
+        res.send('Incorrect request body (body needs address and name and description and invoice)');
         return;
     }
     try{
         await Room.findOneAndUpdate({'_id': new ObjectId(roomId), 'roomList._id': new ObjectId(itemId)},
             {$set: {
-                "roomList.$.content": req.body.content, 
-                "roomList.$.category": req.body.category,
+                "roomList.$.name": req.body.name, 
+                "roomList.$.address": req.body.address,
+                "roomList.$.description": req.body.description,
+                "roomList.$.invoice": req.body.invoice,
                 "roomList.$.edited": true,
                 "roomList.$.date": new Date(),
             }}

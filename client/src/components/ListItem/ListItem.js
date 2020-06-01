@@ -29,32 +29,65 @@ class ListItem extends React.Component{
                 }
                 
                 <div className="listItem">
-                    <div className='listContent'>
-                        { this.props.item.checked ?
-                            <strike>{this.props.item.content}</strike>
-                            : this.props.item.content
-                        }
-                        <div className={`editBtn`}>
-                            <GrEdit onClick={() => {
-                                let {content, category, _id} = this.props.item;
-                                this.props.edit({content, category, _id});
-                            }}
-                            />
-                        </div>
+                    <div className='invoice listContent'>
+                        <b>Invoice #:</b> &nbsp;{this.props.item.invoice}
+                    </div>
+                    <div className='customer listContent'>
+                        <b>Customer:</b> &nbsp;{this.props.item.name}
+                    </div>
+                    <div className='address listContent'>
+                        <b>Address:</b> &nbsp;{this.props.item.address}
+                    </div>
+                    <div className='description listContent'>
+                        <b>Details:</b> &nbsp;{this.props.item.description}
                     </div>
                 </div>
                 <div className={`listToolsWrapper`}>
                     <div className = "listTools">
-                        <div onClick={() => this.setState({confirmOpen: true})} className={`tool`}><AiFillDelete className="listItemToolIcon deleteIcon"/></div>
                         <div onClick={() => this.props.clickCheck(this.props.item._id, !this.props.item.checked)} className={`tool`}>
                             {this.props.item.checked ? <AiFillCheckCircle className="listItemToolIcon checkIcon"/> : <MdRadioButtonUnchecked className="listItemToolIcon checkIcon"/>}
+                            <div className="toolLabel">Picked</div>
                         </div>
+                        <div onClick={() => null} className={`tool`}>
+                            <MdRadioButtonUnchecked className="listItemToolIcon checkIcon"/>
+                            <div className="toolLabel">Dispatched</div>
+                        </div>
+                        
                     </div>
-                    <div className = "listInfo">
-                        <div className ="itemDate">
+                    <div className = "deleteBtnTool">
+                        <div onClick={() => this.setState({confirmOpen: true})} className={``}><AiFillDelete className="deleteIcon"/></div>
+                        {/* <div className ="itemDate">
                             {this.props.item.date}
                             {this.props.item.edited ? <p className="edited">(edited)</p> : null}
+                        </div> */}
+                    </div>
+                </div>
+                <div className={`listToolsWrapper`}>
+                    <div className = "listTools">
+                        <div onClick={() => null} className={`tool`}>
+                            <MdRadioButtonUnchecked className="listItemToolIcon checkIcon"/>
+                            <div className="toolLabel">Complete</div>
+
                         </div>
+                        <div onClick={() => null} className={`tool`}>
+                            <MdRadioButtonUnchecked className="listItemToolIcon checkIcon"/>
+                            <div className="toolLabel">Cancelled</div>
+                        </div>
+                        
+                        
+                    </div>
+                    <div className = "editBtn">
+                        <div className={``}>
+                            <GrEdit onClick={() => {
+                                    this.props.edit(this.props.item);
+                                }}
+                                className={'editTool'}
+                            />
+                        </div>
+                        {/* <div className ="itemDate">
+                            {this.props.item.date}
+                            {this.props.item.edited ? <p className="edited">(edited)</p> : null}
+                        </div> */}
                     </div>
                 </div>
             </div>

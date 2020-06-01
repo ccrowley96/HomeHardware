@@ -71,42 +71,22 @@ class List extends React.Component{
 
     populateListItems(){
         if(this.props.list.length > 0){
-            let categoryMap = {};
-
-            for(let item of this.props.list){
-
-                if(item.category in categoryMap){
-                    categoryMap[item.category].push(item);
-                } else{
-                    categoryMap[item.category] = [item];
-                }
-            }
-
-            return Object.keys(categoryMap).map(category => {
-                return (
-                    <div key={category} className="categoryWrapper">
-                        <div className="categoryTitle">{category}</div>
-                        <div className="categoryContent">
-                        {
-                            categoryMap[category].map(item => {
-                                return (
-                                    <ListItem 
-                                        key={item._id} 
-                                        roomId={this.props.roomId}
-                                        item={{...item, date: this.formatTime(item.date)}}
-                                        fetchNewList={this.props.fetchNewList}
-                                        edit={(data) => {
-                                            this.setState({edit: {open: true, data}})
-                                        }}
-                                        clickCheck={(id, checkVal) => this.clickCheck(id, checkVal)}
-                                    />
-                                )
-                            })
-                        }
-                        </div>
-                    </div>
-                );
-            });
+            return (
+                this.props.list.map(item => {
+                    return (
+                        <ListItem 
+                            key={item._id} 
+                            roomId={this.props.roomId}
+                            item={{...item, date: this.formatTime(item.date)}}
+                            fetchNewList={this.props.fetchNewList}
+                            edit={(data) => {
+                                this.setState({edit: {open: true, data}})
+                            }}
+                            clickCheck={(id, checkVal) => this.clickCheck(id, checkVal)}
+                        />
+                    )
+                })
+            );
         } else{return null}
     }
 
@@ -334,6 +314,7 @@ class List extends React.Component{
     async editItem(item){
         let itemID = this.state.edit.data._id;
         this.setState({edit: {open: false, data: null}});
+        console.log(item);
 
         await fetch(`/api/room/${this.props.roomId}/list/${itemID}`, {
             method: 'PUT',
