@@ -21,7 +21,19 @@ const itemSchema = mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    checked: {
+    picked: {
+        type: Boolean,
+        default: false
+    },
+    dispatched: {
+        type: Boolean,
+        default: false
+    },
+    complete: {
+        type: Boolean,
+        default: false
+    },
+    cancelled: {
         type: Boolean,
         default: false
     },

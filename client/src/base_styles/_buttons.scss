@@ -43,11 +43,11 @@
 }
 
 .red{
-    @include btn-theme($red);
+    @include btn-theme($redTrans);
 }
 
 .green{
-    @include btn-theme($green);
+    @include btn-theme($greenTrans);
 }
 
 .blue{
@@ -55,5 +55,5 @@
 }
 
 .yellow{
-    @include btn-theme($yellow);
+    @include btn-theme($yellowTrans);
 }

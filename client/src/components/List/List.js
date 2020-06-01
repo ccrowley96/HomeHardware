@@ -83,7 +83,7 @@ class List extends React.Component{
                             edit={(data) => {
                                 this.setState({edit: {open: true, data}})
                             }}
-                            clickCheck={(id, checkVal) => this.clickCheck(id, checkVal)}
+                            clickCheck={(id, checkVal, checkKey) => this.clickCheck(id, checkVal, checkKey)}
                         />
                     )
                 })
@@ -269,11 +269,11 @@ class List extends React.Component{
         );
     }
 
-    async clickCheck(itemId, checkVal){
+    async clickCheck(itemId, checkVal, checkKey){
         let updatedList = this.props.list;
         updatedList = updatedList.map(item => {
             if(item._id === itemId){
-                item.checked = checkVal;
+                item[checkKey] = checkVal;
             }
             return item;
         })
@@ -285,7 +285,7 @@ class List extends React.Component{
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({checked: checkVal})
+            body: JSON.stringify({[`${checkKey}`]: checkVal})
         })
         //fetch updated list
         // Fetch new list after delay
@@ -315,7 +315,6 @@ class List extends React.Component{
     async editItem(item){
         let itemID = this.state.edit.data._id;
         this.setState({edit: {open: false, data: null}});
-        console.log(item);
 
         await fetch(`/api/room/${this.props.roomId}/list/${itemID}`, {
             method: 'PUT',

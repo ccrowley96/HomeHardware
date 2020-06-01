@@ -16,7 +16,7 @@ class ListItem extends React.Component{
 
     render(){
         return (
-            <div className={`listItemWrapper${this.props.item.checked ? ' checked': ''}${this.props.roomCode[0] === 'w' ? ' orange': ' lightblue' }`}>
+            <div className={`listItemWrapper${this.props.item.cancelled ? ' cancelled': ''}${this.props.item.complete ? ' complete': ''}${this.props.roomCode[0] === 'w' ? ' orange': ' lightblue' }`}>
                 {this.state.confirmOpen ? 
                     <ConfirmModal 
                         triggerClose={() => this.setState({confirmOpen: false})}
@@ -44,12 +44,12 @@ class ListItem extends React.Component{
                 </div>
                 <div className={`listToolsWrapper`}>
                     <div className = "listTools">
-                        <div onClick={() => this.props.clickCheck(this.props.item._id, !this.props.item.checked)} className={`tool`}>
-                            {this.props.item.checked ? <AiFillCheckCircle className="listItemToolIcon checkIcon"/> : <MdRadioButtonUnchecked className="listItemToolIcon checkIcon"/>}
+                        <div onClick={() => this.props.clickCheck(this.props.item._id, !this.props.item.picked, 'picked')} className={`tool`}>
+                            {this.props.item.picked ? <AiFillCheckCircle className="listItemToolIcon checkIcon"/> : <MdRadioButtonUnchecked className="listItemToolIcon checkIcon"/>}
                             <div className="toolLabel">Picked</div>
                         </div>
-                        <div onClick={() => null} className={`tool`}>
-                            <MdRadioButtonUnchecked className="listItemToolIcon checkIcon"/>
+                        <div onClick={() => this.props.clickCheck(this.props.item._id, !this.props.item.dispatched, 'dispatched')} className={`tool`}>
+                            {this.props.item.dispatched ? <AiFillCheckCircle className="listItemToolIcon checkIcon"/> : <MdRadioButtonUnchecked className="listItemToolIcon checkIcon"/>}
                             <div className="toolLabel">Dispatched</div>
                         </div>
                         
@@ -64,13 +64,13 @@ class ListItem extends React.Component{
                 </div>
                 <div className={`listToolsWrapper`}>
                     <div className = "listTools">
-                        <div onClick={() => null} className={`tool`}>
-                            <MdRadioButtonUnchecked className="listItemToolIcon checkIcon"/>
+                        <div onClick={() => this.props.clickCheck(this.props.item._id, !this.props.item.complete, 'complete')} className={`tool`}>
+                            {this.props.item.complete ? <AiFillCheckCircle className="listItemToolIcon checkIcon"/> : <MdRadioButtonUnchecked className="listItemToolIcon checkIcon"/>}
                             <div className="toolLabel">Complete</div>
 
                         </div>
-                        <div onClick={() => null} className={`tool`}>
-                            <MdRadioButtonUnchecked className="listItemToolIcon checkIcon"/>
+                        <div onClick={() => this.props.clickCheck(this.props.item._id, !this.props.item.cancelled, 'cancelled')} className={`tool`}>
+                            {this.props.item.cancelled ? <AiFillCheckCircle className="listItemToolIcon checkIcon"/> : <MdRadioButtonUnchecked className="listItemToolIcon checkIcon"/>}
                             <div className="toolLabel">Cancelled</div>
                         </div>
                         

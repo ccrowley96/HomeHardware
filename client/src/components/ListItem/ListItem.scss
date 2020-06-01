@@ -40,19 +40,38 @@
     flex-direction: column;
     position: relative;
 
-    &.orange{
-        background-color: $orangeTrans;
-        &.checked{
-            background-color: darken($orangeTrans, 10%);
+    background-color: white;
+
+    &.complete{
+        &.orange{
+            background-color: $orangeTrans;
+        }
+        &.lightblue{
+            background-color: $lightBlueTrans;
         }
     }
 
-    &.lightblue{
-        background-color: $lightBlueTrans;
-        &.checked{
-            background-color: darken($lightBlueTrans, 10%);
+    &.cancelled{
+        background-color: $gray;
+        &.complete{
+            background-color: $gray
         }
     }
+    // &.orange{
+    //     background-color: $orangeTrans;
+    //     &.checked{
+    //         background-color: darken($orangeTrans, 10%);
+    //     }
+    // }
+
+    // &.lightblue{
+    //     background-color: $lightBlueTrans;
+    //     &.checked{
+    //         background-color: darken($lightBlueTrans, 10%);
+    //     }
+    // }
+    border: black;
+    border-style: solid;
 
    
     

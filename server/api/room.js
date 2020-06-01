@@ -292,17 +292,26 @@ router.put('/:id/list/:item_id', validateRoom, validateItem, async (req, res, ne
 router.post('/:id/list/:item_id/check', validateRoom, validateItem, async (req, res, next) => {
     let roomId = req.params.id;
     let itemId = req.params.item_id;
-    
-    if(typeof req.body.checked != 'boolean'){
+
+    if(Object.keys(req.body).length > 1){
         res.status(400);
-        res.send('Incorrect request body (checked: boolean) must be in body');
-        return;
+        res.send("Incorrect request body; body must only have one key");
     }
+    
+    for(let key of Object.keys(req.body)){
+        if(['picked', 'dispatched', 'complete', 'cancelled'].indexOf(key) === -1 && typeof key !== 'boolean'){
+            res.status(400);
+            res.send("Incorrect request body one of ['picked', 'dispatched', 'complete', 'cancelled'] must be in body and be of type boolean");
+            return;
+        }
+    }
+
+    let checkName = Object.keys(req.body)[0];
 
     // Toggle checked
     try{
         await Room.findOneAndUpdate({'_id': new ObjectId(roomId), 'roomList._id': new ObjectId(itemId)},
-            {$set: {"roomList.$.checked": req.body.checked}}
+            {$set: {[`roomList.$.${checkName}`]: req.body[checkName]}}
         )
         res.sendStatus(200);
     } catch(err){
