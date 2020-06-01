@@ -20,7 +20,7 @@ class ListItem extends React.Component{
                 {this.state.confirmOpen ? 
                     <ConfirmModal 
                         triggerClose={() => this.setState({confirmOpen: false})}
-                        message={`Do you want to delete: ${this.props.item.content}?`}
+                        message={`Do you want to delete: ${''} #${this.props.item.invoice}?`}
                         confirm={() => {
                             this.clickDelete();
                             this.setState({confirmOpen: false});
