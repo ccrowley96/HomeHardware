@@ -75,6 +75,7 @@ class List extends React.Component{
                 this.props.list.map(item => {
                     return (
                         <ListItem 
+                            roomCode={this.props.roomCode}
                             key={item._id} 
                             roomId={this.props.roomId}
                             item={{...item, date: this.formatTime(item.date)}}

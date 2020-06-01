@@ -16,7 +16,7 @@ class ListItem extends React.Component{
 
     render(){
         return (
-            <div className={`listItemWrapper${this.props.item.checked ? ' checked': ''} `}>
+            <div className={`listItemWrapper${this.props.item.checked ? ' checked': ''}${this.props.roomCode[0] === 'w' ? ' orange': ' lightblue' }`}>
                 {this.state.confirmOpen ? 
                     <ConfirmModal 
                         triggerClose={() => this.setState({confirmOpen: false})}

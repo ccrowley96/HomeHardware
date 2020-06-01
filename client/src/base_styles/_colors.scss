@@ -1,7 +1,12 @@
-$red: #FF4136;
-$green: #01FF70;
-$orange: #FF851B;
+$red: rgba(255, 64, 54, 1);
+$redTrans: rgba(255, 64, 54, .5);
+$green: rgba(1, 255, 111, 1);
+$greenTrans: rgba(1, 255, 111, 0.5);
+$orange: rgba(255, 133, 27, 1);
+$orangeTrans: rgba(255, 133, 27, 0.5);
 $gray: #AAAAAA;
 $blue: #0074D9;
-$yellow: #FFDC00;
-$lightBlue: #7FDBFF;
+$yellow: rgba(255, 221, 0, 1);
+$yellowTrans: rgba(255, 221, 0, .5);
+$lightBlue: rgba(127, 219, 255, 1);
+$lightBlueTrans: rgba(127, 219, 255, 0.5);

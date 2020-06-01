@@ -150,7 +150,7 @@
     padding:5px 5px 5px 5px;
     border-radius: 5px;
     margin-bottom:20px;
-    background-color: $lightBlue;
+    background-color: $lightBlueTrans;
 
     
 
@@ -161,12 +161,12 @@
         margin-left: -5px;
     }
     &:hover{
-        background-color: darken($lightBlue, 10%);
+        background-color: darken($lightBlueTrans, 10%);
     }
     &.orange{
-        background-color: $orange;
+        background-color: $orangeTrans;
         &:hover{
-            background-color: darken($orange, 10%);
+            background-color: darken($orangeTrans, 10%);
         }
     }
     

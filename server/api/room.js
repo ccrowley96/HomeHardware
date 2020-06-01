@@ -122,11 +122,11 @@ router.post('/getRoomByCode', async (req, res, next) => {
                 })
             }
             // Validate that code is OK TODO
-            if(roomCode.length !== 7 && ['c', 'w'].indexOf(roomCode[0]) === -1){
+            if(roomCode.length !== 7 && ['c', 'w', 'C', 'W'].indexOf(roomCode[0]) === -1){
                 sendErrorStatus();
                 return;
             }
-
+            roomCode = roomCode[0].toLowerCase() + roomCode.slice(1);
             let dateString = roomCode.slice(1);
             let dateFormat = 'MMDDYY';
             let momentObj = moment(dateString, dateFormat);

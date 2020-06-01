@@ -35,14 +35,27 @@
     display: flex;
     margin-top: 10px;
     margin-bottom: 10px;
-    background-color: $lightBlue;
+    background-color: $lightBlueTrans;
     border-radius: 5px;
     flex-direction: column;
     position: relative;
 
-    &.checked{
-        background-color: #AAAAAA;
+    &.orange{
+        background-color: $orangeTrans;
+        &.checked{
+            background-color: darken($orangeTrans, 10%);
+        }
     }
+
+    &.lightblue{
+        background-color: $lightBlueTrans;
+        &.checked{
+            background-color: darken($lightBlueTrans, 10%);
+        }
+    }
+
+   
+    
 }
 
 .listToolsWrapper{
