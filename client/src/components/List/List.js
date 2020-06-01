@@ -146,7 +146,7 @@ class List extends React.Component{
         let empty = this.props.list && this.props.list.length === 0;
         return (
             <div className={`titleBarWrapper${empty ? ' empty': ''}`}>
-                <div className="titleButtonWrap checkAll">
+                {/* <div className="titleButtonWrap checkAll">
                     <button 
                         className={`yellow checkBtn`}
                         onClick={() => this.props.handleCheckAllClick()}
@@ -159,7 +159,7 @@ class List extends React.Component{
                             <FiCheck className="buttonIcon"/>} 
                         </div>
                     </button>
-                </div>
+                </div> */}
                 <div className="titleButtonWrap print">
                     <button 
                         className={`yellow`}

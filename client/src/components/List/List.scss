@@ -166,6 +166,7 @@
         }
 
         &.print{
+            width:100%;
             justify-content: flex-end; 
             padding-left:10px;
             @media screen and (max-width: 800px){
