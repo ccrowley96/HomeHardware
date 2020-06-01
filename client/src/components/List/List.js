@@ -117,7 +117,7 @@ class List extends React.Component{
                             Adds item to your list
                         </div>
                         <div className="tips tip" style={{marginTop: '10px'}}><i>Click  <AiOutlineTag style={{paddingLeft: '5px'}}/> to share this list</i></div>
-                        <div className="tips tip"><i>Click  <GrEdit style={{paddingLeft: '5px'}}/> to change this list's name</i></div>
+                        {/* <div className="tips tip"><i>Click  <GrEdit style={{paddingLeft: '5px'}}/> to change this list's name</i></div> */}
                         <div className="tips tip" style={{display: `${!isMobile().any ? 'none': 'initial'}`}}>
                             <FiShare className={`btnIcon`} style={{paddingRight: '5px'}}/> 
                             Add this app to your home screen

@@ -86,8 +86,8 @@ class Rooms extends React.Component{
                 'Content-Type': 'application/json'
             }
         });
+        
         let todaysRooms = await todaysResponse.json();
-        console.log(todaysRooms);
 
         localRooms = JSON.parse(localStorage.getItem('rooms'));
         for(let room of todaysRooms.matchingRooms){
@@ -174,27 +174,28 @@ class Rooms extends React.Component{
 
     async displayNotes(){
         //Note: Lists will expire in 30 days if not used
+        let noteInterval = 8500;
         let notes = [
-            'Lists will expire in 30 days if not used',
-            'Add this app to your phone homescreen from the browser menu',
-            'Share a 7 letter code to invite someone to a list',
-            'You can print your lists - this will organize all items by category',
-            'Careful: deleting a list also deletes the list for anyone who has access',
-            'Copy a list link and send it to anyone.  They will automatically have access.'
+            {note: 'Lists will expire in 30 days if not used', interval: noteInterval},
+            {note: 'Add this app to your phone homescreen from the browser menu', interval: noteInterval},
+            {note: 'Share a 7 letter code to invite someone to a list', interval: noteInterval},
+            {note: 'You can print your lists!', interval: noteInterval},
+            {note: 'Careful: deleting a list also deletes the list for anyone who has access', interval: noteInterval},
+            {note: 'Copy a list link and send it to anyone.  They will automatically have access.', interval: noteInterval},
+            {note: 'If you want to look at the list for Carp on 12/25/20, enter: c122520 and press join.  You can look up any date this way!', interval: 20000}
         ]
         // Shuffle notes and add empty final note
         notes = (notes.sort(() => Math.random() - .5))
-        notes.push('');
+        notes.push({note: '', interval: noteInterval});
 
-        let noteInterval = 7000;
-        this.setState({note: notes[0]})
+        this.setState({note: notes[0].note})
 
         for(let note of notes.slice(1)){
             await new Promise((res, rej) => {
                 this.noteTimeout = setTimeout(() => {
-                    this.setState({note})
-                    res(note);
-                }, noteInterval)
+                    this.setState({note: note.note})
+                    res(note.note);
+                }, note.interval)
             })
         }
     }
@@ -210,7 +211,7 @@ class Rooms extends React.Component{
                                     type="text" 
                                     value={this.state.joinRoomVal} 
                                     onChange={(e) => this.handleJoinInputChange(e)}
-                                    placeholder={`[w|c]yymmdd`}
+                                    placeholder={`[w|c]mmddyy`}
                                     className="joinRoomInput"
                                     maxLength={7}
                                 >
@@ -246,7 +247,7 @@ class Rooms extends React.Component{
                             className="green createRoom"
                             onClick={() => this.createRoom()}
                         >
-                            Create List
+                            Custom List
                             <RiPlayListAddLine className="roomToolIcon"/>
                         </button>
                 </div>

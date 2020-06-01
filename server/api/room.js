@@ -137,14 +137,14 @@ router.post('/getRoomByCode', async (req, res, next) => {
                 return;
             }
 
-            let dispDate = moment(dateString, dateFormat).format('MM/DD/YY');
+            let dispDate = moment(dateString, dateFormat).format('MM/DD');
 
             // Create room
             let expireAt = new Date(Date.now() + utils.secondsInYear);
             let room = new Room({
                 roomCode, 
                 expireAt: expireAt, 
-                roomName: roomCode[0] === 'c' ? `C ${dispDate}` : `W ${dispDate}`});
+                roomName: roomCode[0] === 'c' ? `Carp ${dispDate}` : `Woodlawn ${dispDate}`});
             // Save new room using roomCode
             let roomCreated;
             try {
