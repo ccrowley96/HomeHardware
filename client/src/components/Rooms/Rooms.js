@@ -177,11 +177,10 @@ class Rooms extends React.Component{
         let notes = [
             'Lists will expire in 30 days if not used',
             'Add this app to your phone homescreen from the browser menu',
-            'Share a 6 letter code to invite someone to your list',
-            'Adding a grocery category to list items makes shopping easier!',
+            'Share a 7 letter code to invite someone to a list',
             'You can print your lists - this will organize all items by category',
             'Careful: deleting a list also deletes the list for anyone who has access',
-            'Copy a list link and send it to friends.  They will automatically have access.'
+            'Copy a list link and send it to anyone.  They will automatically have access.'
         ]
         // Shuffle notes and add empty final note
         notes = (notes.sort(() => Math.random() - .5))
@@ -211,7 +210,7 @@ class Rooms extends React.Component{
                                     type="text" 
                                     value={this.state.joinRoomVal} 
                                     onChange={(e) => this.handleJoinInputChange(e)}
-                                    placeholder={"Enter code..."}
+                                    placeholder={`[w|c]yymmdd`}
                                     className="joinRoomInput"
                                     maxLength={7}
                                 >
