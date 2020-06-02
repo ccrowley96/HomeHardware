@@ -307,7 +307,7 @@ class Rooms extends React.Component{
                                 className="green createRoom"
                                 onClick={() => this.clearStoreRooms()}
                             >
-                                Show Week Only
+                                Show This Week Only
                                 <AiOutlineUnorderedList className="roomToolIcon"/>
                             </button> :
                             <button 
