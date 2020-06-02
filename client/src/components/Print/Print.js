@@ -1,4 +1,5 @@
 import React from 'react';
+import {withRouter} from 'react-router-dom';
 import {formatTime} from '../../utils/utils';
 import {FiCheck} from 'react-icons/fi';
 import './Print.scss';
@@ -37,28 +38,37 @@ class Print extends React.Component{
         if(!this.state.list) return (<div>loading...</div>);
         if(this.state.list.list.length === 0) return(<div>No items found</div>)
 
-        let categoryMap = {};
-        for(let item of this.state.list.list){
-            if(item.category in categoryMap){
-                categoryMap[item.category].push(item);
-            } else{
-                categoryMap[item.category] = [item];
-            }
-        }
-
+        // 
         let formatList = () => {
-            return Object.keys(categoryMap).map(category => {
+            return this.state.list.list.map(item => {
                 return(
-                    <div key={category} className="categoryWrapper">
-                    <div className="categoryTitle">{category}</div>
+                    <div key={item._id} className="categoryWrapper">
+                        <div className="categoryTitle">Invoice: {' '} #{item.invoice}</div>
                         <div className="categoryContent">
-                            {categoryMap[category].map(item => {
-                                return (
-                                    <div className={`${item.checked ? 'checked': ''}`} key={item._id}>
-                                        -{item.content} <FiCheck className='checkMark'/>
-                                    </div>
-                                )
-                            })}
+                            <div>
+                                <b>Customer:</b>{' '} {item.name} 
+                            </div>
+                            <div>
+                                <b>Address:</b>{' '} {item.address} 
+                            </div>
+                            <div>
+                                <b>Details:</b>{' '} {item.description} 
+                            </div>
+                            <div >
+                                <b>Timestamp:</b>{' '} {formatTime(item.date)} 
+                            </div>
+                            <div style={{display: `${item.picked ? 'block' : 'none'}`}}>
+                                <b>Picked:</b>{' '} <FiCheck className='checkMark'/>
+                            </div>
+                            <div style={{display: `${item.dispatched ? 'block' : 'none'}`}}>
+                                <b>Dispatched:</b>{' '} <FiCheck className='checkMark'/>
+                            </div>
+                            <div style={{display: `${item.complete ? 'block' : 'none'}`}}>
+                                <b>Complete:</b>{' '} <FiCheck className='checkMark'/>
+                            </div>
+                            <div style={{display: `${item.cancelled ? 'block' : 'none'}`}}>
+                                <b>Cancelled:</b>{' '} <FiCheck className='checkMark'/>
+                            </div>
                         </div>
                     </div>
                 )
@@ -68,7 +78,7 @@ class Print extends React.Component{
         return(
             <div className="printWrapper">
                 <div className="listTitle">   
-                    Shopping List: <span className="dateTime">{formatTime(new Date(Date.now()))}</span>
+                    {this.state.activeRoomName} - <span className="dateTime">{formatTime(new Date(Date.now()))}</span>
                 </div>
                 <div className="printDataWrapper">
                     {formatList()}
@@ -78,4 +88,4 @@ class Print extends React.Component{
     }
 }
 
-export default Print;
+export default withRouter(Print);

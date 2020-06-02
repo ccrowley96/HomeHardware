@@ -1,9 +1,9 @@
 import moment from 'moment-timezone';
-moment().tz("America/Los_Angeles").format();
+moment().tz("America/Toronto").format();
 
 export function formatTime(date){
     let millis = Date.parse(date);
-    return moment(millis).tz("America/Los_Angeles").format("ddd, MMM Do, h:mm a")
+    return moment(millis).tz("America/Toronto").format("ddd, MMM Do, h:mm a")
 }
 
 export const groceryCategories = [

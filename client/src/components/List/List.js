@@ -10,6 +10,7 @@ import {AiOutlinePrinter, AiOutlineDelete, AiOutlineUnorderedList, AiOutlineTag}
 import {MdRadioButtonUnchecked} from 'react-icons/md';
 import {GrAdd,GrEdit} from 'react-icons/gr';
 import {FiShare, FiCheck} from 'react-icons/fi';
+import {formatTime} from '../../utils/utils';
 
 import isMobile from 'ismobilejs';
 import './List.scss';
@@ -64,11 +65,6 @@ class List extends React.Component{
         document.removeEventListener('keydown', this.hotKeyListener);
     }
 
-    formatTime(date){
-        let millis = Date.parse(date);
-        return moment(millis).tz("America/Los_Angeles").format("ddd, MMM Do, h:mm a")
-    }
-
     populateListItems(){
         if(this.props.list.length > 0){
             return (
@@ -78,7 +74,7 @@ class List extends React.Component{
                             roomCode={this.props.roomCode}
                             key={item._id} 
                             roomId={this.props.roomId}
-                            item={{...item, date: this.formatTime(item.date)}}
+                            item={{...item, date: formatTime(item.date)}}
                             fetchNewList={this.props.fetchNewList}
                             edit={(data) => {
                                 this.setState({edit: {open: true, data}})
