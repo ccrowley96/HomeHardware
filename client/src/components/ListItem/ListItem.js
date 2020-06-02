@@ -38,6 +38,9 @@ class ListItem extends React.Component{
                     <div className='address listContent'>
                         <b>Address:</b> &nbsp;{this.props.item.address}
                     </div>
+                    <div className='address listContent'>
+                        <b>Timestamp:</b> &nbsp;{this.props.item.date}
+                    </div>
                     <div className='description listContent'>
                         <b>Details:</b> &nbsp;{this.props.item.description}
                     </div>
