@@ -6,6 +6,13 @@ export function formatTime(date){
     return moment(millis).tz("America/Toronto").format("ddd, MMM Do, h:mm a")
 }
 
+export function formatDayOfWeekFromRoomCode(roomCode){
+    let dateString = roomCode.slice(1);
+    let dateFormat = 'MMDDYY';
+    let momentObj = moment(dateString, dateFormat).format("dddd")
+    return momentObj;
+}
+
 export function sortRooms(rooms){
     let sortedRooms = rooms.sort((a, b) => {
         let dateStringA = a.roomCode.slice(1), dateStringB = b.roomCode.slice(1);

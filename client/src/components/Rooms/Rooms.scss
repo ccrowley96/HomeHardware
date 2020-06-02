@@ -186,7 +186,7 @@
     background-color: $lightBlueTrans;
 
     @media screen and (max-width: 375px){
-        font-size: medium;
+        font-size: 14px;
     }
 
     .joinRoomClickRegion{
@@ -213,6 +213,12 @@
         width: 65%;
         padding-left: 10px;
         padding-right: 16px;
+        .dayOfWeek{
+            color: lighten(black, 30%);
+            @media screen and (max-width: 530px){
+                display: none;
+            }
+        }
     }
     .roomTools{
         display: flex;

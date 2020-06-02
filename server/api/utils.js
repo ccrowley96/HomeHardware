@@ -18,7 +18,7 @@ exports.createListsInTimeFrame = async (timeFrame) => {
             if(roomCodeCheck.length === 0){
                 // If not, create lists for each code
                 let expireAt = new Date(Date.now() + exports.secondsInYear);
-                let dispDate = moment(storeCode.slice(1), 'MMDDYY').format('MM/DD');
+                let dispDate = moment(storeCode.slice(1), 'MMDDYY').format('MM/DD/YY');
                 let room = new Room({
                     roomCode: storeCode, 
                     expireAt: expireAt, 

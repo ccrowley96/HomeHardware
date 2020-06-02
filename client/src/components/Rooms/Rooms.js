@@ -4,7 +4,7 @@ import {RiPlayListAddLine, RiPassportLine} from 'react-icons/ri';
 import {AiOutlineTag, AiFillDelete, AiOutlineUnorderedList} from 'react-icons/ai';
 import ConfirmModal from '../ConfirmModal/ConfirmModal';
 import isMobile from 'ismobilejs';
-import {sortRooms} from '../../utils/utils';
+import {sortRooms, formatDayOfWeekFromRoomCode} from '../../utils/utils';
 import './Rooms.scss';
 
 class Rooms extends React.Component{
@@ -187,15 +187,15 @@ class Rooms extends React.Component{
 
     async displayNotes(){
         //Note: Lists will expire in 30 days if not used
-        let noteInterval = 10000;
+        let noteInterval = 1000;
         let notes = [
-            {note: 'Lists will expire in 30 days if not used', interval: noteInterval},
-            {note: 'Add this app to your phone homescreen from the browser menu', interval: noteInterval},
-            {note: 'Share a 7 letter code to invite someone to a list', interval: noteInterval},
-            {note: 'You can print your lists!', interval: noteInterval},
-            {note: 'Careful: deleting a list also deletes the list for anyone who has access', interval: noteInterval},
-            {note: 'Copy a list link and send it to anyone.  They will automatically have access.', interval: noteInterval},
-            {note: 'If you want to look at the list for Carp on 12/25/20, enter: c122520 and press join.  You can look up any date this way!', interval: noteInterval}
+            {note: 'Delivery lists will expire in 30 days if not used', interval: 8000},
+            {note: 'Add this app to your phone homescreen from the browser menu', interval: 10000},
+            {note: 'Share a 7 letter code to invite someone to a delivery list', interval: 8000},
+            {note: 'You can print your delivery lists!', interval: 5000},
+            {note: 'Copy a delivery list link and send it to anyone.  They will automatically have access.', interval: 8000},
+            {note: 'If you want to look at the delivery list for Carp on 12/25/20, enter: c122520 and press "Join".', interval: 15000},
+            {note: 'The "Join" button lets you look at any delivery day.', interval: 8000}
         ]
         // Shuffle notes and add empty final note
         notes = (notes.sort(() => Math.random() - .5))
@@ -203,13 +203,15 @@ class Rooms extends React.Component{
 
         this.setState({note: notes[0].note})
 
+        let idx = 1;
         for(let note of notes.slice(1)){
             await new Promise((res, rej) => {
                 this.noteTimeout = setTimeout(() => {
                     this.setState({note: note.note})
                     res(note.note);
-                }, note.interval)
+                }, notes[idx -1].interval)
             })
+            idx += 1;
         }
     }
 
@@ -340,7 +342,7 @@ class RoomItem extends React.Component{
                     onClick={() => this.props.joinMyRoom(this.props.room.roomId, this.props.room.roomCode, this.props.room.roomName)}>
                 </div>
                 <div className="roomName" >
-                    {this.props.room.roomName}
+                    {this.props.room.roomName} <span className="dayOfWeek">&nbsp;-&nbsp;{formatDayOfWeekFromRoomCode(this.props.room.roomCode)}</span>
                 </div>
                 <div className="roomTools">
                     <div className="roomCode">

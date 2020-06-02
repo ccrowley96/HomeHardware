@@ -143,7 +143,7 @@ router.post('/getRoomByCode', async (req, res, next) => {
                 return;
             }
 
-            let dispDate = moment(dateString, dateFormat).format('MM/DD');
+            let dispDate = moment(dateString, dateFormat).format('MM/DD/YY');
 
             // Create room
             let expireAt = new Date(Date.now() + utils.secondsInYear);
