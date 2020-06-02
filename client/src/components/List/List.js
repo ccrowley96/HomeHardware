@@ -249,7 +249,7 @@ class List extends React.Component{
                         }}
                         title={'Edit list name'}
                     >
-                        {JSON.parse(localStorage.getItem('activeRoom')).roomName}
+                        {this.props.roomName}
                         {this.props.roomCode.length === 6 ? <GrEdit className="btnIcon"/> : null}
                     </div>
                     <CopyToClipboard 
