@@ -23,6 +23,16 @@ class Rooms extends React.Component{
 
     componentDidMount() {
         const {params} = this.props.match;
+
+        // Load local storage into state (if available)
+        let store = localStorage.getItem('store');
+        store = store ? store : 'woodlawn';
+        let localRoomsObj = JSON.parse(localStorage.getItem('rooms'));
+        let admin = JSON.parse(localStorage.getItem('admin'))?.admin;
+        if(!admin) admin = false;
+        this.setState({rooms: localRoomsObj, admin, store});
+        // this.setState({admin, store});
+       
         if('roomCode' in params){
             let join = async() => {
                 let roomCode = params.roomCode;
@@ -70,9 +80,7 @@ class Rooms extends React.Component{
     }
 
     updateRooms(){
-        let store = localStorage.getItem('store');
-        store = store ? store : 'woodlawn';
-        this.setState({rooms: JSON.parse(localStorage.getItem('rooms')), store});
+        this.setState({rooms: JSON.parse(localStorage.getItem('rooms'))});
     }
 
     clearStoreRooms(){
@@ -84,9 +92,6 @@ class Rooms extends React.Component{
     async validateRooms(){
         let localRooms = JSON.parse(localStorage.getItem('rooms'))
         let activeRoom = JSON.parse(localStorage.getItem('activeRoom'));
-        let admin = JSON.parse(localStorage.getItem('admin'))?.admin;
-        if(!admin) admin = false;
-        this.setState({admin});
 
         if(localRooms){
             let ids = localRooms.map(room => room.roomId);
