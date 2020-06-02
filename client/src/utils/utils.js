@@ -6,6 +6,17 @@ export function formatTime(date){
     return moment(millis).tz("America/Toronto").format("ddd, MMM Do, h:mm a")
 }
 
+export function sortRooms(rooms){
+    let sortedRooms = rooms.sort((a, b) => {
+        let dateStringA = a.roomCode.slice(1), dateStringB = b.roomCode.slice(1);
+        let dateFormat = 'MMDDYY';
+        let momentObjA = moment(dateStringA, dateFormat), momentObjB = moment(dateStringB, dateFormat);
+        let result = momentObjA.diff(momentObjB);
+        return result >= 0 ? 1 : -1;
+    });
+    return sortedRooms;
+}
+
 export const groceryCategories = [
     "Uncategorized",
     "Baking",

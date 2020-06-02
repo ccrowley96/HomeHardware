@@ -4,6 +4,7 @@ import {RiPlayListAddLine, RiPassportLine} from 'react-icons/ri';
 import {AiOutlineTag, AiFillDelete} from 'react-icons/ai';
 import ConfirmModal from '../ConfirmModal/ConfirmModal';
 import isMobile from 'ismobilejs';
+import {sortRooms} from '../../utils/utils';
 import './Rooms.scss';
 
 class Rooms extends React.Component{
@@ -203,6 +204,11 @@ class Rooms extends React.Component{
 
     render(){
         //TODO sort rooms by date most recent first
+        let sortedRooms = this.state.rooms;
+        if(this.state.store !== 'custom' && sortedRooms){
+            sortedRooms = sortedRooms.filter(room => room.roomCode.length === 7);
+            sortedRooms = sortRooms(sortedRooms);
+        }
         return(
             <div className="roomsWrapper">
                 <div className="roomTopToolbarWrapper">
@@ -249,7 +255,7 @@ class Rooms extends React.Component{
                 </div>
                 
                 { 
-                    (this.state.rooms && this.state.rooms.length !== 0) ? this.state.rooms.map(room => {
+                    (sortedRooms && sortedRooms.length !== 0) ? sortedRooms.map(room => {
                         if(this.state.store === 'custom' && room.roomCode.length === 6
                         ){
                             return (
