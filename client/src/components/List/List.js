@@ -239,11 +239,14 @@ class List extends React.Component{
                     </div>
                 </div>
                 <div className="roomCodeWrapper">
-                    <div className="roomName"
+                    <div className="roomName" 
+                        onClick={() => {
+                            if(this.props.roomCode.length === 6) this.setState({editNameOpen: true})
+                        }}
                         title={'Edit list name'}
                     >
                         {JSON.parse(localStorage.getItem('activeRoom')).roomName}
-                        {/* <GrEdit className="btnIcon"/>  */}
+                        {this.props.roomCode.length === 6 ? <GrEdit className="btnIcon"/> : null}
                     </div>
                     <CopyToClipboard 
                         text={`${process.env.NODE_ENV === 'development' ? window.location.href : 'https://homehardware.herokuapp.com/'}rooms/${this.props.roomCode}`}

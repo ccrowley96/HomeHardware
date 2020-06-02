@@ -1,6 +1,6 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom';
-import {RiPlayListAddLine} from 'react-icons/ri';
+import {RiPlayListAddLine, RiPassportLine} from 'react-icons/ri';
 import {AiOutlineTag, AiFillDelete} from 'react-icons/ai';
 import ConfirmModal from '../ConfirmModal/ConfirmModal';
 import isMobile from 'ismobilejs';
@@ -14,7 +14,8 @@ class Rooms extends React.Component{
             joinRoomVal: '',
             joinRoomInfo: '',
             confirmOpen: false,
-            note: ''
+            note: '',
+            store: 'woodlawn'
         }
         this.noteTimeout = null;
     }
@@ -201,6 +202,7 @@ class Rooms extends React.Component{
     }
 
     render(){
+        //TODO sort rooms by date most recent first
         return(
             <div className="roomsWrapper">
                 <div className="roomTopToolbarWrapper">
@@ -228,9 +230,41 @@ class Rooms extends React.Component{
                     </form>
                 </div>
                 
-                <h2>Home Hardware Lists</h2>
+                <div className="storeToggleWrapper">
+                    <div className={`storeName woodlawn${this.state.store === 'woodlawn' ? ' storeActive': ''}`} 
+                        onClick={()=> this.setState({store: 'woodlawn'})}
+                    >
+                        Woodlawn
+                    </div>
+                    <div className={`storeName carp${this.state.store === 'carp' ? ' storeActive': ''}`}
+                        onClick={()=> this.setState({store: 'carp'})}
+                    >
+                        Carp
+                    </div>
+                    <div className={`storeName custom${this.state.store === 'custom' ? ' storeActive': ''}`}
+                        onClick={()=> this.setState({store: 'custom'})}
+                    >
+                        Custom
+                    </div>
+                </div>
+                
                 { 
                     (this.state.rooms && this.state.rooms.length !== 0) ? this.state.rooms.map(room => {
+                        if(this.state.store === 'custom' && room.roomCode.length === 6
+                        ){
+                            return (
+                                <RoomItem
+                                    key={room.roomId}
+                                    roomName={room.roomName}
+                                    room={room} 
+                                    joinMyRoom={this.joinMyRoom.bind(this)}
+                                    deleteRoom={this.deleteRoom.bind(this)}
+                                />
+                            )
+                        }
+                        if (!room.roomName.toLowerCase().includes(this.state.store)){
+                            return null;
+                        } 
                         return (
                             <RoomItem
                                 key={room.roomId}
@@ -242,7 +276,7 @@ class Rooms extends React.Component{
                         )
                     }) : <div>No Lists found!</div> 
                 }   
-                <div className="createRoomWrapper">
+                <div className="createRoomWrapper" style={{display: this.state.store === 'custom' ? ' flex' : 'none'}}>
                         <button 
                             className="green createRoom"
                             onClick={() => this.createRoom()}

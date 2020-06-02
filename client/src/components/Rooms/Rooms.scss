@@ -15,6 +15,39 @@
     }
 }
 
+.storeToggleWrapper{
+    display: flex;
+    padding-bottom: 15px;
+    .storeName{
+        cursor: pointer;
+        font-size: x-large;
+        padding-right: 10px;
+        padding-left: 10px;
+        @media (hover: hover){
+            &:hover{
+                // text-decoration: underline;
+                background-color: darken(white, 10%);
+            }
+        }
+        @media screen and (max-width: 450px){
+            font-size: large;
+        }
+        &.storeActive{
+            text-decoration: underline;
+        }
+    }
+    .woodlawn{
+        border-right-color: black;
+        border-right-width: 2px;
+        border-right-style: solid;
+    }
+    .carp{
+        border-right-color: black;
+        border-right-width: 2px;
+        border-right-style: solid;
+    }
+}
+
 .joinRoomForm{
     margin-left: auto;
 }
