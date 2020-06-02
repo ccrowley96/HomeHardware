@@ -24,7 +24,6 @@ router.post('/', async (req, res, next) => {
         roomCodeCheck = await Room.find({roomCode: roomCode});
     } while(roomCodeCheck.length !== 0);
 
-    // Set expire time to 60 seconds
     let expireAt = new Date(Date.now() + secondsUntilExpire);
     let room = new Room({roomCode, expireAt});
 
@@ -198,7 +197,7 @@ router.post('/getTimeframeRooms', async (req, res, next) => {
 });
 
 // Update Room Name
-router.post('/:id/changeName', updateExpireTime, async (req, res, next) => {
+router.post('/:id/changeName', async (req, res, next) => {
     let roomId;
     let roomName;
     try{

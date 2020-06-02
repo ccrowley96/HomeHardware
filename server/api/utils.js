@@ -4,7 +4,7 @@ const {Item, Room } = require('../db/db_index');
 
 moment().tz("America/Toronto").format();
 
-exports.secondsInYear = 31104000;
+exports.secondsInYear = 365*24*60*60*1000;
 exports.listTimeFrame = 7;
 // Function to create two new lists for this week (only if they are not already created)
 exports.createListsInTimeFrame = async (timeFrame) => {

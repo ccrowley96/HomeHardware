@@ -18,7 +18,7 @@ exports.validateRoom = async (req, res, next) =>{
     if(room){
 
         // Update via expireAt middleware
-        exports.updateExpireTime(req, res, () => {});
+        // exports.updateExpireTime(req, res, () => {});
         next();
     }
     else{
