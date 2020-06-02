@@ -25,6 +25,28 @@ router.get('/', (req, res, next) => {
     res.send('Welcome to the List App API');
 });
 
+//Verify Admin Password
+router.post('/verifyAdmin', (req,res, next) => {
+  let password = req.body.password;
+    
+  if(!req.body.password){
+      res.status(400);
+      res.send('Incorrect request body (see password)');
+      return;
+  }
+
+  if(req.body.password !== process.env.ADMIN_PASSWORD){
+      res.status(401);
+      res.send('Password incorrect.');
+      return;
+  }
+  res.status(200);
+  res.json({
+    title: 'Admin',
+    secret: process.env.CLIENT_SECRET
+  })
+});
+
 //API room routing
 router.use('/room', room);
 

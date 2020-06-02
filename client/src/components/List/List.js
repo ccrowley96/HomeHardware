@@ -74,12 +74,14 @@ class List extends React.Component{
                             roomCode={this.props.roomCode}
                             key={item._id} 
                             roomId={this.props.roomId}
-                            item={{...item, date: formatTime(item.date)}}
+                            item={{...item, date: formatTime(item.date), editDate: formatTime(item.editDate)}}
                             fetchNewList={this.props.fetchNewList}
                             edit={(data) => {
                                 this.setState({edit: {open: true, data}})
                             }}
                             clickCheck={(id, checkVal, checkKey) => this.clickCheck(id, checkVal, checkKey)}
+                            admin={this.props.admin}
+
                         />
                     )
                 })
@@ -94,12 +96,12 @@ class List extends React.Component{
                     <div className={`emptyListPlaceholder`}>
                         <div className="noItems">No Items Found!</div>
                         <div className="tips title"><b><u>Info</u></b></div>
-                        <div className="tips tip">
+                        {/* <div className="tips tip">
                             <button className="red" disabled={true}>
                                 <AiOutlineDelete className={`btnIcon`}/> 
                             </button>
                             Delete all items on list
-                        </div>
+                        </div> */}
                         <div className="tips tip">
                             <button className="yellow" disabled={true}>
                                 <AiOutlineUnorderedList className={`btnIcon`}/> 
@@ -213,14 +215,16 @@ class List extends React.Component{
                 }
 
                 <div className={`listFooter`}>
-                    <div className="footerDiv">
-                        <button onClick={() => this.setState({confirmOpen: true})} 
-                            className={`red`}
-                            title={'Clear all items from this list'}
-                        >
-                            <AiOutlineDelete className={`btnIcon`}/> 
-                        </button>
-                    </div>
+                    { this.props.admin?.admin ?
+                        <div className="footerDiv">
+                            <button onClick={() => this.setState({confirmOpen: true})} 
+                                className={`red`}
+                                title={'Clear all items from this list'}
+                            >
+                                <AiOutlineDelete className={`btnIcon`}/> 
+                            </button>
+                        </div> : null
+                    }
                     <div className="footerDiv">
                             <button className="roomsButton yellow" 
                                 onClick={() => {this.props.history.push('/rooms');}}

@@ -12,7 +12,8 @@ class App extends React.Component {
       activeRoomCode: null,
       activeRoomName: null,
       checkAll: false,
-      checkDisabled: false
+      checkDisabled: false,
+      admin: null
     }
   }
 
@@ -44,7 +45,8 @@ class App extends React.Component {
       this.props.history.push('/rooms');
     } else{
       let {roomId, roomCode, roomName} = JSON.parse(localStorage.getItem('activeRoom'));
-      this.setState({activeRoomID: roomId, activeRoomCode: roomCode, activeRoomName: roomName});
+      let admin = JSON.parse(localStorage.getItem('admin'));
+      this.setState({activeRoomID: roomId, activeRoomCode: roomCode, activeRoomName: roomName, admin});
       this.updateList(roomId);
     }
   }
@@ -80,6 +82,7 @@ class App extends React.Component {
           fetchNewList={() => this.updateList()}
           handlePrintClick={() => this.handlePrintClick()}
           handleCheckAllClick={() => this.handleCheckAllClick()}
+          admin={this.state.admin}
         />
       </div>
     )

@@ -21,6 +21,10 @@ const itemSchema = mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    editDate:{
+        type: Date,
+        required: false
+    },
     picked: {
         type: Boolean,
         default: false

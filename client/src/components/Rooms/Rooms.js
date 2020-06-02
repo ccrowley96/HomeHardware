@@ -39,8 +39,34 @@ class Rooms extends React.Component{
         this.displayNotes();
     }
 
+
     componentWillUnmount(){
         clearTimeout(this.noteTimeout);
+    }
+
+    async adminBtnClick(){
+        if(this.state.admin){
+            localStorage.setItem('admin', null);
+            this.setState({admin: false});
+            return;
+        }
+        let password = prompt('Enter Admin Password');
+        if(!password) return;
+        let response = await fetch(`/api/verifyAdmin`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({password})
+        });
+        
+        if(response.status === 200){
+            let responseBody = await response.json();
+            localStorage.setItem('admin', JSON.stringify({admin: true, secret: responseBody.secret}));
+            this.setState({admin: true, joinRoomInfo: ''});
+        } else{
+            this.setState({joinRoomInfo: 'Admin Password Incorrect.'})
+        }
     }
 
     updateRooms(){
@@ -57,6 +83,9 @@ class Rooms extends React.Component{
     async validateRooms(){
         let localRooms = JSON.parse(localStorage.getItem('rooms'))
         let activeRoom = JSON.parse(localStorage.getItem('activeRoom'));
+        let admin = JSON.parse(localStorage.getItem('admin'))?.admin;
+        if(!admin) admin = false;
+        this.setState({admin});
 
         if(localRooms){
             let ids = localRooms.map(room => room.roomId);
@@ -189,7 +218,7 @@ class Rooms extends React.Component{
         //Note: Lists will expire in 30 days if not used
         let noteInterval = 1000;
         let notes = [
-            {note: 'Delivery lists will expire in 30 days if not used', interval: 8000},
+            {note: 'Delivery lists will expire in 1 year', interval: 8000},
             {note: 'Add this app to your phone homescreen from the browser menu', interval: 10000},
             {note: 'Share a 7 letter code to invite someone to a delivery list', interval: 8000},
             {note: 'You can print your delivery lists!', interval: 5000},
@@ -284,6 +313,7 @@ class Rooms extends React.Component{
                                     room={room} 
                                     joinMyRoom={this.joinMyRoom.bind(this)}
                                     deleteRoom={this.deleteRoom.bind(this)}
+                                    admin={this.state.admin}
                                 />
                             )
                         }
@@ -297,11 +327,18 @@ class Rooms extends React.Component{
                                 room={room} 
                                 joinMyRoom={this.joinMyRoom.bind(this)}
                                 deleteRoom={this.deleteRoom.bind(this)}
+                                admin={this.state.admin}
                             />
                         )
                     }) : <div>No Lists found!</div> 
                 }   
                 <div className="createRoomWrapper">
+                        <button 
+                                className="yellow adminBtn"
+                                onClick={() => {this.adminBtnClick()}}
+                        >
+                            {this.state.admin ? 'Logout Admin' : 'Admin'}
+                        </button>
                         {this.state.store !== 'custom' ?
                             <button 
                                 className="green createRoom"
@@ -349,7 +386,7 @@ class RoomItem extends React.Component{
                         <AiOutlineTag className="roomCodeIcon"/>
                         {this.props.room.roomCode}
                     </div>
-                    <div className="roomDelete">
+                    <div className={`roomDelete${this.props.admin ? ' admin' :' hidden'}`}>
                         <div onClick={() => this.setState({confirmOpen: true})} className="deleteBtn">
                             <AiFillDelete className="deleteIcon"/>
                         </div>

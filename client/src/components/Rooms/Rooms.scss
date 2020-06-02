@@ -161,12 +161,28 @@
 }
 
 .createRoom{
+    margin-left: auto;
     font-size: large;
+    @media screen and (max-width: 425px) {
+        font-size: small;
+    }
     height: 40px;
     button{
         height: 70%;
         width: 90%;
-        font-size: large; 
+        justify-content: center;
+    }
+}
+
+.adminBtn{
+    font-size: large;
+    @media screen and (max-width: 425px) {
+        font-size: small;
+    }
+    height: 40px;
+    button{
+        height: 70%;
+        width: 90%;
         justify-content: center;
     }
 }
@@ -234,6 +250,10 @@
             justify-content: center;
             height: 100%;
             width: 50px;
+
+            &.hidden{
+                display: none;
+            }
             .deleteIcon{
                 font-size: xx-large;
                 color: $red;

@@ -44,6 +44,11 @@ class ListItem extends React.Component{
                     <div className='description listContent'>
                         <b>Details:</b> &nbsp;{this.props.item.description}
                     </div>
+                    {this.props.item.edited ?
+                    <div className='description listContent'>
+                        <b>modified</b> &nbsp; @ &nbsp;{this.props.item.editDate}
+                    </div> : null
+                    }
                 </div>
                 <div className={`listToolsWrapper`}>
                     <div className = "listTools">
@@ -57,13 +62,11 @@ class ListItem extends React.Component{
                         </div>
                         
                     </div>
-                    <div className = "deleteBtnTool">
-                        <div onClick={() => this.setState({confirmOpen: true})} className={``}><AiFillDelete className="deleteIcon"/></div>
-                        {/* <div className ="itemDate">
-                            {this.props.item.date}
-                            {this.props.item.edited ? <p className="edited">(edited)</p> : null}
-                        </div> */}
-                    </div>
+                    {this.props.admin?.admin ?
+                        <div className = "deleteBtnTool">
+                            <div onClick={() => this.setState({confirmOpen: true})} className={``}><AiFillDelete className="deleteIcon"/></div>
+                        </div> : null
+                    }
                 </div>
                 <div className={`listToolsWrapper`}>
                     <div className = "listTools">

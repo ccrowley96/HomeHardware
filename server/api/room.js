@@ -288,7 +288,7 @@ router.put('/:id/list/:item_id', validateRoom, validateItem, async (req, res, ne
                 "roomList.$.description": req.body.description,
                 "roomList.$.invoice": req.body.invoice,
                 "roomList.$.edited": true,
-                "roomList.$.date": new Date(),
+                "roomList.$.editDate": new Date(),
             }}
         )
         res.sendStatus(200);
