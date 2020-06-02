@@ -1,7 +1,7 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom';
 import {RiPlayListAddLine, RiPassportLine} from 'react-icons/ri';
-import {AiOutlineTag, AiFillDelete} from 'react-icons/ai';
+import {AiOutlineTag, AiFillDelete, AiOutlineUnorderedList} from 'react-icons/ai';
 import ConfirmModal from '../ConfirmModal/ConfirmModal';
 import isMobile from 'ismobilejs';
 import {sortRooms} from '../../utils/utils';
@@ -36,7 +36,6 @@ class Rooms extends React.Component{
             //Validate rooms
             this.validateRooms();
         }
-
         this.displayNotes();
     }
 
@@ -45,11 +44,14 @@ class Rooms extends React.Component{
     }
 
     updateRooms(){
-        this.setState({rooms: JSON.parse(localStorage.getItem('rooms'))});
+        let store = localStorage.getItem('store');
+        store = store ? store : 'woodlawn';
+        this.setState({rooms: JSON.parse(localStorage.getItem('rooms')), store});
     }
 
     clearStoreRooms(){
-        
+        localStorage.clear();
+        window.location.reload(); 
     }
 
     async validateRooms(){
@@ -242,20 +244,26 @@ class Rooms extends React.Component{
                 
                 <div className="storeToggleWrapper">
                     <div className={`storeName woodlawn${this.state.store === 'woodlawn' ? ' storeActive': ''}`} 
-                        onClick={()=> this.setState({store: 'woodlawn'})}
+                        onClick={()=> {
+                            localStorage.setItem('store', 'woodlawn');
+                            this.setState({store: 'woodlawn'})
+                        }}
                     >
                         Woodlawn
                     </div>
                     <div className={`storeName carp${this.state.store === 'carp' ? ' storeActive': ''}`}
-                        onClick={()=> this.setState({store: 'carp'})}
+                        onClick={()=> {
+                            localStorage.setItem('store', 'carp');
+                            this.setState({store: 'carp'})
+                        }}
                     >
                         Carp
                     </div>
-                    <div className={`storeName custom${this.state.store === 'custom' ? ' storeActive': ''}`}
+                    {/* <div className={`storeName custom${this.state.store === 'custom' ? ' storeActive': ''}`}
                         onClick={()=> this.setState({store: 'custom'})}
                     >
                         Custom
-                    </div>
+                    </div> */}
                 </div>
                 
                 { 
@@ -286,14 +294,23 @@ class Rooms extends React.Component{
                         )
                     }) : <div>No Lists found!</div> 
                 }   
-                <div className="createRoomWrapper" style={{display: this.state.store === 'custom' ? ' flex' : 'none'}}>
-                        <button 
-                            className="green createRoom"
-                            onClick={() => this.createRoom()}
-                        >
-                            Custom List
-                            <RiPlayListAddLine className="roomToolIcon"/>
-                        </button>
+                <div className="createRoomWrapper">
+                        {this.state.store !== 'custom' ?
+                            <button 
+                                className="green createRoom"
+                                onClick={() => this.clearStoreRooms()}
+                            >
+                                Show Week Only
+                                <AiOutlineUnorderedList className="roomToolIcon"/>
+                            </button> :
+                            <button 
+                                className="green createRoom"
+                                onClick={() => this.createRoom()}
+                            >
+                                Custom List
+                                <RiPlayListAddLine className="roomToolIcon"/>
+                            </button>
+                        }
                 </div>
                 <div className="notes">
                     <p><i>{this.state.note}</i></p>
