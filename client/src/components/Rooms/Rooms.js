@@ -48,6 +48,10 @@ class Rooms extends React.Component{
         this.setState({rooms: JSON.parse(localStorage.getItem('rooms'))});
     }
 
+    clearStoreRooms(){
+        
+    }
+
     async validateRooms(){
         let localRooms = JSON.parse(localStorage.getItem('rooms'))
         let activeRoom = JSON.parse(localStorage.getItem('activeRoom'));
@@ -82,7 +86,7 @@ class Rooms extends React.Component{
         }
 
         // Add todays rooms to local storage rooms
-        let todaysResponse = await fetch('/api/room/getTodaysRooms', {
+        let todaysResponse = await fetch('/api/room/getTimeframeRooms', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

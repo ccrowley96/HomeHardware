@@ -48,7 +48,7 @@ app.listen(port, () => {
     console.log(`List App server running on port: ${port}!`);
     // server ready to accept connections here
     // Create today's lists / check if already made
-    utils.createTodaysLists();
+    utils.createListsInTimeFrame(utils.listTimeFrame);
     utils.scheduleListCreator();
   }
 );

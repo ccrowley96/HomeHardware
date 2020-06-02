@@ -123,7 +123,6 @@ router.post('/getRoomByCode', async (req, res, next) => {
                     match: null
                 })
             }
-            // Validate that code is OK TODO
             if(roomCode.length !== 7 || ['c', 'w', 'C', 'W'].indexOf(roomCode[0]) === -1){
                 sendErrorStatus();
                 return;
@@ -167,25 +166,30 @@ router.post('/getRoomByCode', async (req, res, next) => {
 });
 
 // Fetch today's rooms
-router.post('/getTodaysRooms', async (req, res, next) => {
+router.post('/getTimeframeRooms', async (req, res, next) => {
+    let timeframe = 7;
     let matchingRooms = [];
-    let todaysLaunchCodes = utils.getTodaysListCodes();
-    // fetch matching ids from db and return those rooms
-    try{
-        for(let storeCode of todaysLaunchCodes){
-            let match = await Room.findOne({roomCode: storeCode});
-            if(match) matchingRooms.push(match);
-        }
-
-        res.status(200);
-        res.json({
-            title: 'Rooms',
-            matchingRooms
-        });
-    } catch(err){
-        console.log(err);
-        res.sendStatus(500);
+    let codes = [];
+    for(let offset = 0; offset < timeframe; offset++){
+        codes.push(utils.getOffsetListCodes(offset))
     }
+    for(let dayCode of codes){
+        try{
+            for(let storeCode of dayCode){
+                let match = await Room.findOne({roomCode: storeCode});
+                if(match) matchingRooms.push(match);
+            }
+        } catch(err){
+            console.log(err);
+            res.sendStatus(500);
+            return;
+        }
+    }
+    res.status(200);
+    res.json({
+        title: 'Rooms',
+        matchingRooms
+    });
 });
 
 // Update Room Name
