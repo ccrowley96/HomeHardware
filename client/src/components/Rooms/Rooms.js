@@ -147,19 +147,24 @@ class Rooms extends React.Component{
             body: JSON.stringify({roomCode: remoteRoomCode})
         });
         let roomValidated = await response.json();
-        if(roomValidated.match == null){
+        if(response.status === 406){
+            this.setState({joinRoomInfo: 'Date must be within 1 year'})
+        }
+        else if(roomValidated.match == null){
             //Flag room not found
             this.setState({joinRoomInfo: 'List code invalid'});
-        } else{
-
+        }
+        else{
             let storageToSet = JSON.parse(localStorage.getItem('rooms'));
             let roomId = roomValidated.match._id, 
                 roomCode = roomValidated.match.roomCode,
                 roomName = roomValidated.match.roomName;
 
             // Ignore if room already in localStorage
-            if(storageToSet && storageToSet.findIndex(room => room.roomId === roomId) !== -1)
+            if(storageToSet && storageToSet.findIndex(room => room.roomId === roomId) !== -1){
+                this.setState({joinRoomInfo: 'Room already joined!'})
                 return;
+            }
 
             if(storageToSet) storageToSet.push({roomId, roomCode, roomName});
             else storageToSet = [{roomId, roomCode, roomName}]

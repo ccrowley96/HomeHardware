@@ -116,8 +116,8 @@ router.post('/getRoomByCode', async (req, res, next) => {
                 match
             });
         } else{
-            let sendErrorStatus = () => {
-                res.status(404);
+            let sendErrorStatus = (code = 404) => {
+                res.status(code);
                 res.json({
                     title: 'Rooms',
                     match: null
@@ -135,6 +135,11 @@ router.post('/getRoomByCode', async (req, res, next) => {
 
             if(!isValidDate){
                 sendErrorStatus();
+                return;
+            }
+
+            if(Math.abs(momentObj.diff(moment())) > 365*24*60*60*1000){
+                sendErrorStatus(406);
                 return;
             }
 
