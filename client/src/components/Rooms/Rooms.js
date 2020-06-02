@@ -76,7 +76,8 @@ class Rooms extends React.Component{
     }
 
     clearStoreRooms(){
-        localStorage.clear();
+        localStorage.removeItem('rooms');
+        localStorage.removeItem('activeRoom');
         window.location.reload(); 
     }
 
