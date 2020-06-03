@@ -50,5 +50,6 @@ app.listen(port, () => {
     // Create today's lists / check if already made
     utils.createListsInTimeFrame(utils.listTimeFrame);
     utils.scheduleListCreator();
+    utils.createOrVerifyEmployeePassword();
   }
 );

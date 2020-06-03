@@ -3,7 +3,7 @@ import {withRouter} from 'react-router-dom';
 import {RiPlayListAddLine} from 'react-icons/ri';
 import {AiOutlineTag, AiFillDelete, AiOutlineUnorderedList} from 'react-icons/ai';
 import ConfirmModal from '../ConfirmModal/ConfirmModal';
-import {sortRooms, formatDayOfWeekFromRoomCode, isRoomCodeToday} from '../../utils/utils';
+import {sortRooms, formatDayOfWeekFromRoomCode, isRoomCodeToday, getSecretHeader} from '../../utils/utils';
 import './Rooms.scss';
 
 class Rooms extends React.Component{
@@ -13,6 +13,8 @@ class Rooms extends React.Component{
             rooms: null,
             joinRoomVal: '',
             joinRoomInfo: '',
+            employeePassword: '',
+            empoloyeePasswordInfo: '',
             confirmOpen: false,
             note: '',
             store: 'woodlawn'
@@ -143,7 +145,10 @@ class Rooms extends React.Component{
     }
 
     async createRoom(){
-        let response = await fetch('/api/room', {method: 'POST'});
+        let response = await fetch('/api/room', {
+            headers: getSecretHeader(),
+            method: 'POST'
+        });
         let room = await response.json();
         let storageToSet = JSON.parse(localStorage.getItem('rooms'));
 
@@ -155,7 +160,10 @@ class Rooms extends React.Component{
     }
 
     async deleteRoom(roomId){
-        await fetch(`/api/room/${roomId}`, {method: 'DELETE'});
+        await fetch(`/api/room/${roomId}`, {
+            headers: getSecretHeader(),
+            method: 'DELETE'
+        });
         let storageToSet = JSON.parse(localStorage.getItem('rooms'));
         storageToSet = storageToSet.filter(localstorage_room => localstorage_room.roomId !== roomId)
         localStorage.setItem('rooms', JSON.stringify(storageToSet));
@@ -213,10 +221,32 @@ class Rooms extends React.Component{
         this.setState({joinRoomVal: e.target.value, joinRoomInfo: ''});
     }
 
+    handlePasswordInputChange(e){
+        this.setState({employeePassword: e.target.value, employeePasswordInfo: ''});
+    }
+
     handleSubmit(event) {
         event.preventDefault();
-
         this.joinRemoteRoom()
+    }
+    async handleEmployeePasswordSubmit(event){
+        event.preventDefault();
+        if(this.state.employeePassword === ''){
+            this.setState({employeePasswordInfo: 'Password cannot be empty'});
+            return;
+        }
+        let result = window.confirm(`Are you sure you want to change employee password to: ${this.state.employeePassword}`);
+        if(result){
+            console.log('trying to change password to: ', this.state.employeePassword);
+           
+            let response = await fetch(`/api/changeEmployeePassword`, {
+                method: 'POST',
+                headers: getSecretHeader([{'Content-Type': 'application/json'}]),
+                body: JSON.stringify({password: this.state.employeePassword})
+            });
+            console.log(response.status);
+        }
+        this.setState({employeePassword: ''})
     }
 
     async displayNotes(){
@@ -362,6 +392,29 @@ class Rooms extends React.Component{
                             </button>
                         }
                 </div>
+                {this.state.admin ?
+                    <form onSubmit={(e) => this.handleEmployeePasswordSubmit(e)} className="changePasswordForm">
+                        <button 
+                                className="red employeePasswordBtn"
+                                onClick={() => {}}
+                                type='submit'
+                                value="Submit" 
+                        >
+                            Change Employee Password
+                        </button>
+                        <input
+                            type="text" 
+                            value={this.state.employeePassword} 
+                            onChange={(e) => this.handlePasswordInputChange(e)}
+                            placeholder={`********`}
+                            className="passwordInput"
+                            maxLength={14}
+                        >
+                        </input>
+                        <label className="employeePasswordInfo">{this.state.employeePasswordInfo}</label>
+                    </form>
+                 : null
+                }
                 <div className="notes">
                     <p><i>{this.state.note}</i></p>
                 </div>

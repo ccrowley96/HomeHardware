@@ -23,10 +23,18 @@ export function isRoomCodeToday(roomCode){
     return false;
 }
 
-export function getSecretHeader(){
+export function getSecretHeader(additionalHeaders = null){
+    
     const header = new Headers();
     let secret = JSON.parse(localStorage.getItem('admin'))?.secret;
     header.append('secret', secret);
+    if(additionalHeaders){
+        for(let addHead of additionalHeaders){
+            for(let addHeadKey of Object.keys(addHead)){
+                header.append(addHeadKey, addHead[addHeadKey])
+            }
+        }
+    }
     return header;
 }
 

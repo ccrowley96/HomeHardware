@@ -1,6 +1,6 @@
 const moment = require('moment-timezone');
 const CronJob = require('cron').CronJob;
-const {Item, Room } = require('../db/db_index');
+const {Item, Room, Employee } = require('../db/db_index');
 
 moment().tz("America/Toronto").format();
 
@@ -54,4 +54,19 @@ exports.scheduleListCreator = () => {
         start: true,
         timeZone: 'US/Eastern'
       });
+}
+
+exports.createOrVerifyEmployeePassword = async () => {
+    // Check if entry is already in Employee
+    let employeeDbCount = await Employee.find().count();
+    if(employeeDbCount === 0){
+        // Create new employee entry with password
+        const employee = new Employee({
+            password: process.env.DEFAULT_EMPLOYEE_PASSWORD
+        })
+        employee.save();
+    } else{
+        // Password already created
+        return;
+    }
 }

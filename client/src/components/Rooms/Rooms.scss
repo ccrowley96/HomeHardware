@@ -272,3 +272,40 @@
         }
     }
 }
+
+.changePasswordForm{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 20px;
+    position: relative;
+
+    .employeePasswordBtn{
+        font-size: large;
+        min-width: 185px;
+        @media screen and (max-width: 745px){
+            font-size: small;
+        }
+    }
+
+    .passwordInput{
+        align-items: center;
+        // width: 150px;
+        background-color: #dddddd;
+        height: 30px;
+        font-size: x-large;
+        border-radius: 5px;
+        margin-left:20px;
+
+        @media screen and (max-width: 745px) {
+            width:100%;
+            // margin-left:auto;
+        }
+    }
+
+    .employeePasswordInfo{
+        position: absolute;
+        color: $red;
+        top:45px;
+        // right:5px;
+    }
+}
