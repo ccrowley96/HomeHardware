@@ -3,7 +3,7 @@ import {withRouter} from 'react-router-dom';
 import {RiPlayListAddLine} from 'react-icons/ri';
 import {AiOutlineTag, AiFillDelete, AiOutlineUnorderedList} from 'react-icons/ai';
 import ConfirmModal from '../ConfirmModal/ConfirmModal';
-import {sortRooms, formatDayOfWeekFromRoomCode} from '../../utils/utils';
+import {sortRooms, formatDayOfWeekFromRoomCode, isRoomCodeToday} from '../../utils/utils';
 import './Rooms.scss';
 
 class Rooms extends React.Component{
@@ -327,6 +327,7 @@ class Rooms extends React.Component{
                         } 
                         return (
                             <RoomItem
+                                isToday={isRoomCodeToday(room.roomCode)}
                                 key={room.roomId}
                                 roomName={room.roomName}
                                 room={room} 
@@ -379,7 +380,7 @@ class RoomItem extends React.Component{
 
     render(){
         return(
-            <div key={this.props.room.roomId} className={`roomWrapper${this.props.room.roomName[0] === 'W' ? ' orange' : ' lightblue'}`} tabIndex={0}>
+            <div key={this.props.room.roomId} className={`roomWrapper${this.props.room.roomName[0] === 'W' ? ' orange' : ' lightblue'}${this.props.isToday ? ' today' : ''}`} tabIndex={0}>
                 <div className="joinRoomClickRegion"
                     onClick={() => this.props.joinMyRoom(this.props.room.roomId, this.props.room.roomCode, this.props.room.roomName)}>
                 </div>

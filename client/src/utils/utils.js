@@ -13,6 +13,16 @@ export function formatDayOfWeekFromRoomCode(roomCode){
     return momentObj;
 }
 
+export function isRoomCodeToday(roomCode){
+    let dateString = roomCode.slice(1);
+    let dateFormat = 'MMDDYY';
+    let momentObj = moment(dateString, dateFormat);
+    if(momentObj.isSame(moment(), 'day')){
+        return true;
+    }
+    return false;
+}
+
 export function getSecretHeader(){
     const header = new Headers();
     let secret = JSON.parse(localStorage.getItem('admin'))?.secret;
