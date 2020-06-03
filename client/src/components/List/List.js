@@ -7,9 +7,8 @@ import ConfirmModal from '../ConfirmModal/ConfirmModal';
 import AddEditModal from '../AddEditModal/AddEditModal';
 import EditNameModal from '../EditNameModal/EditNameModal';
 import {AiOutlinePrinter, AiOutlineDelete, AiOutlineUnorderedList, AiOutlineTag} from 'react-icons/ai'
-import {MdRadioButtonUnchecked} from 'react-icons/md';
 import {GrAdd,GrEdit} from 'react-icons/gr';
-import {FiShare, FiCheck} from 'react-icons/fi';
+import {FiShare} from 'react-icons/fi';
 import {formatTime} from '../../utils/utils';
 
 import isMobile from 'ismobilejs';

@@ -66,3 +66,13 @@ exports.updateExpireTime = async (req, res, next) => {
     await Room.updateOne({"_id": new ObjectId(roomId)}, {expireAt: expireAt});
     next();
 };
+
+exports.validateAdmin = async (req, res, next) => {
+    let secret = req.headers.secret;
+    if(!secret || secret !== process.env.CLIENT_SECRET){
+        res.status(401);
+        res.send('Admin action not authorized.  Please log into admin mode.');
+        return;
+    }
+    next();
+}

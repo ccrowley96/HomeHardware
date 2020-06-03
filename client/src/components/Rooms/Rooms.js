@@ -1,9 +1,8 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom';
-import {RiPlayListAddLine, RiPassportLine} from 'react-icons/ri';
+import {RiPlayListAddLine} from 'react-icons/ri';
 import {AiOutlineTag, AiFillDelete, AiOutlineUnorderedList} from 'react-icons/ai';
 import ConfirmModal from '../ConfirmModal/ConfirmModal';
-import isMobile from 'ismobilejs';
 import {sortRooms, formatDayOfWeekFromRoomCode} from '../../utils/utils';
 import './Rooms.scss';
 
@@ -244,7 +243,7 @@ class Rooms extends React.Component{
                 this.noteTimeout = setTimeout(() => {
                     this.setState({note: note.note})
                     res(note.note);
-                }, notes[idx -1].interval)
+                }, notes[idx - 1].interval)
             })
             idx += 1;
         }

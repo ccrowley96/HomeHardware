@@ -1,5 +1,4 @@
 import React from 'react';
-import {groceryCategories} from '../../utils/utils'
 import './AddEditModal.scss';
 
 class AddEditModal extends React.Component{

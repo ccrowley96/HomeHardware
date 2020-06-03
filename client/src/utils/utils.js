@@ -13,6 +13,13 @@ export function formatDayOfWeekFromRoomCode(roomCode){
     return momentObj;
 }
 
+export function getSecretHeader(){
+    const header = new Headers();
+    let secret = JSON.parse(localStorage.getItem('admin'))?.secret;
+    header.append('secret', secret);
+    return header;
+}
+
 export function sortRooms(rooms){
     let sortedRooms = rooms.sort((a, b) => {
         let dateStringA = a.roomCode.slice(1), dateStringB = b.roomCode.slice(1);

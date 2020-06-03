@@ -4,13 +4,13 @@ const randomstring = require('randomstring');
 const {Item, Room } = require('../db/db_index');
 const utils = require('./utils');
 const moment = require('moment-timezone');
-const {validateRoom, validateItem, updateExpireTime, secondsUntilExpire} = require('./middleware');
+const {validateRoom, validateItem, validateAdmin, secondsUntilExpire} = require('./middleware');
 
 var ObjectId = require('mongoose').Types.ObjectId; 
 
 /* --------------- ROOM ROUTING --------------- */
 // Create Room
-router.post('/', async (req, res, next) => {
+router.post('/', validateAdmin, async (req, res, next) => {
     // Find unique room code
     let roomCodeCheck = null;
     let roomCode = null;
@@ -43,7 +43,7 @@ router.post('/', async (req, res, next) => {
 });
 
 // Delete Room
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', validateAdmin, async (req, res, next) => {
     let roomId;
     try{
         roomId = req.params.id;
@@ -197,7 +197,7 @@ router.post('/getTimeframeRooms', async (req, res, next) => {
 });
 
 // Update Room Name
-router.post('/:id/changeName', async (req, res, next) => {
+router.post('/:id/changeName', validateAdmin, async (req, res, next) => {
     let roomId;
     let roomName;
     try{
@@ -351,7 +351,7 @@ router.post('/:id/list/checkAll', validateRoom, async (req, res, next) => {
 });
 
 //DELETE item by ID
-router.delete('/:id/list/:item_id', validateRoom, async (req, res, next) => {
+router.delete('/:id/list/:item_id', validateAdmin, validateRoom, async (req, res, next) => {
     let roomId = req.params.id;
     let itemId = req.params.item_id;
 
@@ -367,7 +367,7 @@ router.delete('/:id/list/:item_id', validateRoom, async (req, res, next) => {
 });
 
 //DELETE all items (clear list)
-router.delete('/:id/list', validateRoom, async (req, res, next) => {
+router.delete('/:id/list', validateAdmin, validateRoom, async (req, res, next) => {
     let roomId = req.params.id;
     
     try{

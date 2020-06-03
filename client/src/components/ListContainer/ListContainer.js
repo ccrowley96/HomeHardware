@@ -43,7 +43,6 @@ class App extends React.Component {
   }
 
   componentDidMount(){
-    let roomId;
     if(JSON.parse(localStorage.getItem('activeRoom')) == null){
       this.props.history.push('/rooms');
     } else{
