@@ -1,5 +1,6 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom';
+import {getSecretEmployeeHeader} from '../../utils/utils';
 import List from '../List/List'
 import './ListContainer.scss';
 
@@ -22,7 +23,7 @@ class App extends React.Component {
   updateList(inititalRoomId = null){
     let roomId = inititalRoomId ? inititalRoomId : this.state.activeRoomID;
 
-    fetch(`/api/room/${roomId}/list`)
+    fetch(`/api/room/${roomId}/list`, {headers: getSecretEmployeeHeader()})
       .then(response => {
         if(response.status !== 200){
           this.props.history.push('/rooms');
@@ -69,9 +70,7 @@ class App extends React.Component {
     this.setState(prevState => ({checkAll: !prevState.checkAll, checkDisabled: true}));
     await fetch(`/api/room/${this.state.activeRoomID}/list/checkAll`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        headers: getSecretEmployeeHeader([{'Content-Type': 'application/json'}]),
         body: JSON.stringify({checked: onClickCheckState})
     });
     this.updateList();

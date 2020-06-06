@@ -1,6 +1,6 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom';
-import {formatTime} from '../../utils/utils';
+import {formatTime, getSecretEmployeeHeader} from '../../utils/utils';
 import {FiCheck} from 'react-icons/fi';
 import './Print.scss';
 
@@ -14,7 +14,7 @@ class Print extends React.Component{
     }
 
     updateList(roomId){
-        fetch(`/api/room/${roomId}/list`)
+        fetch(`/api/room/${roomId}/list`, {headers: getSecretEmployeeHeader()})
           .then(response => response.json())
           .then(list => {
             this.setState({list})

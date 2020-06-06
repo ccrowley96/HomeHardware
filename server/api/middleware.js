@@ -76,3 +76,13 @@ exports.validateAdmin = async (req, res, next) => {
     }
     next();
 }
+
+exports.validateEmployee = async (req, res, next) => {
+    let secret = req.headers.secret;
+    if(!secret || secret !== process.env.EMPLOYEE_SECRET){
+        res.status(401);
+        res.send('Employee action not authorized.  Please log into employee mode.');
+        return;
+    }
+    next();
+}

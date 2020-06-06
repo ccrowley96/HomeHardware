@@ -66,6 +66,7 @@ router.post('/verifyEmployee', async (req,res, next) => {
       title: 'Employee',
       secret: process.env.EMPLOYEE_SECRET
     })
+    return;
   } 
   res.status(401);
   res.send('Password incorrect.');
@@ -73,7 +74,6 @@ router.post('/verifyEmployee', async (req,res, next) => {
 
 // Change Employee password
 router.post('/changeEmployeePassword', validateAdmin, async (req,res,next) => {
-  console.log(req.body);
   let password = req.body.password;
 
   if(!password){

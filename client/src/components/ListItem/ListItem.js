@@ -3,7 +3,7 @@ import ConfirmModal from '../ConfirmModal/ConfirmModal';
 import {GrEdit} from 'react-icons/gr';
 import {AiFillDelete, AiFillCheckCircle} from 'react-icons/ai';
 import {MdRadioButtonUnchecked} from 'react-icons/md';
-import {getSecretHeader} from '../../utils/utils';
+import {getSecretAdminHeader} from '../../utils/utils';
 import './ListItem.scss';
 
 class ListItem extends React.Component{
@@ -106,7 +106,7 @@ class ListItem extends React.Component{
     async clickDelete(){
         await fetch(`/api/room/${this.props.roomId}/list/${this.props.item._id}`,
             {
-                headers: getSecretHeader(),
+                headers: getSecretAdminHeader(),
                 method: 'DELETE',
 
             });

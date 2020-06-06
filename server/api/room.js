@@ -4,7 +4,7 @@ const randomstring = require('randomstring');
 const {Item, Room } = require('../db/db_index');
 const utils = require('./utils');
 const moment = require('moment-timezone');
-const {validateRoom, validateItem, validateAdmin, secondsUntilExpire} = require('./middleware');
+const {validateRoom, validateItem, validateAdmin, validateEmployee, secondsUntilExpire} = require('./middleware');
 
 var ObjectId = require('mongoose').Types.ObjectId; 
 
@@ -62,7 +62,7 @@ router.delete('/:id', validateAdmin, async (req, res, next) => {
 });
 
 // Fetch room - (used to fetch rooms by id stored in local storage)
-router.post('/getMatchingIds', async (req, res, next) => {
+router.post('/getMatchingIds', validateEmployee, async (req, res, next) => {
     // pull ids from body id []
     let ids;
     try{
@@ -92,7 +92,7 @@ router.post('/getMatchingIds', async (req, res, next) => {
 });
 
 // Fetch room by room code - (used to fetch rooms by room code stored in local storage)
-router.post('/getRoomByCode', async (req, res, next) => {
+router.post('/getRoomByCode', validateEmployee, async (req, res, next) => {
     // pull ids from body id []
     let roomCode;
     try{
@@ -170,7 +170,7 @@ router.post('/getRoomByCode', async (req, res, next) => {
 });
 
 // Fetch today's rooms
-router.post('/getTimeframeRooms', async (req, res, next) => {
+router.post('/getTimeframeRooms', validateEmployee, async (req, res, next) => {
     let timeframe = 7;
     let matchingRooms = [];
     let codes = [];
@@ -228,7 +228,7 @@ router.post('/:id/changeName', validateAdmin, async (req, res, next) => {
 
 /* --------------- LIST ROUTING --------------- */
 //GET all list items from room
-router.get('/:id/list', validateRoom, async (req, res, next) => {
+router.get('/:id/list', validateEmployee, validateRoom, async (req, res, next) => {
     let roomId = req.params.id;
     let room = await Room.findById(new ObjectId(roomId));
     let list = room.roomList;
@@ -241,7 +241,7 @@ router.get('/:id/list', validateRoom, async (req, res, next) => {
 });
 
 //POST new list item
-router.post('/:id/list', validateRoom, async (req, res, next) => {
+router.post('/:id/list', validateEmployee, validateRoom, async (req, res, next) => {
     let roomId = req.params.id;
     
     if(!req.body.invoice || !req.body.address || !req.body.name){
@@ -271,7 +271,7 @@ router.post('/:id/list', validateRoom, async (req, res, next) => {
 });
 
 // UPDATE item by ID
-router.put('/:id/list/:item_id', validateRoom, validateItem, async (req, res, next) => {
+router.put('/:id/list/:item_id', validateEmployee, validateRoom, validateItem, async (req, res, next) => {
     let roomId = req.params.id;
     let itemId = req.params.item_id;
     
@@ -299,7 +299,7 @@ router.put('/:id/list/:item_id', validateRoom, validateItem, async (req, res, ne
 });
 
 //toggle 'checked' on item id
-router.post('/:id/list/:item_id/check', validateRoom, validateItem, async (req, res, next) => {
+router.post('/:id/list/:item_id/check', validateEmployee, validateRoom, validateItem, async (req, res, next) => {
     let roomId = req.params.id;
     let itemId = req.params.item_id;
 
@@ -331,7 +331,7 @@ router.post('/:id/list/:item_id/check', validateRoom, validateItem, async (req, 
 })
 
 //toggle 'check all' on room
-router.post('/:id/list/checkAll', validateRoom, async (req, res, next) => {
+router.post('/:id/list/checkAll', validateEmployee, validateRoom, async (req, res, next) => {
     let roomId = req.params.id;
 
     if(req.body.checked === undefined || typeof req.body.checked != 'boolean'){

@@ -1,6 +1,11 @@
 import moment from 'moment-timezone';
 moment().tz("America/Toronto").format();
 
+export function isLoggedIn(){
+    let employee = JSON.parse(localStorage.getItem('employee'));
+    return employee?.loggedIn ? employee.loggedIn : false;
+}
+
 export function formatTime(date){
     let millis = Date.parse(date);
     return moment(millis).tz("America/Toronto").format("ddd, MMM Do, h:mm a")
@@ -23,10 +28,23 @@ export function isRoomCodeToday(roomCode){
     return false;
 }
 
-export function getSecretHeader(additionalHeaders = null){
-    
+export function getSecretAdminHeader(additionalHeaders = null){
     const header = new Headers();
     let secret = JSON.parse(localStorage.getItem('admin'))?.secret;
+    header.append('secret', secret);
+    if(additionalHeaders){
+        for(let addHead of additionalHeaders){
+            for(let addHeadKey of Object.keys(addHead)){
+                header.append(addHeadKey, addHead[addHeadKey])
+            }
+        }
+    }
+    return header;
+}
+
+export function getSecretEmployeeHeader(additionalHeaders = null){
+    const header = new Headers();
+    let secret = JSON.parse(localStorage.getItem('employee'))?.secret;
     header.append('secret', secret);
     if(additionalHeaders){
         for(let addHead of additionalHeaders){

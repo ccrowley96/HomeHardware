@@ -8,23 +8,20 @@ import './index.scss';
 import ListContainer from './components/ListContainer/ListContainer';
 import Print from './components/Print/Print'
 import Rooms from './components/Rooms/Rooms';
+import PrivateRoute from './components/PrivateRoute/PrivateRoute';
+import Login from './components/Login/Login';
 
 ReactDOM.render(
   <React.StrictMode>
     <Router>
       <Switch>
-          <Route path="/print">
-            <Print />
+          <Route path="/login">
+            <Login/>
           </Route>
-          <Route path="/rooms/:roomCode">
-            <Rooms />
-          </Route>
-          <Route path="/rooms">
-            <Rooms />
-          </Route>
-          <Route path="/">
-            <ListContainer />
-          </Route>
+          <PrivateRoute path="/print" component={Print}></PrivateRoute>
+          <PrivateRoute path="/rooms/:roomCode" component={Rooms}></PrivateRoute>
+          <PrivateRoute path="/rooms" component={Rooms}></PrivateRoute>
+          <PrivateRoute path="/" component={ListContainer}></PrivateRoute>
       </Switch>
     </Router>
   </React.StrictMode>,

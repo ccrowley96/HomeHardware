@@ -9,7 +9,7 @@ import EditNameModal from '../EditNameModal/EditNameModal';
 import {AiOutlinePrinter, AiOutlineDelete, AiOutlineUnorderedList, AiOutlineTag} from 'react-icons/ai'
 import {GrAdd,GrEdit} from 'react-icons/gr';
 import {FiShare} from 'react-icons/fi';
-import {formatTime} from '../../utils/utils';
+import {formatTime, getSecretEmployeeHeader, getSecretAdminHeader} from '../../utils/utils';
 
 import isMobile from 'ismobilejs';
 import './List.scss';
@@ -284,9 +284,7 @@ class List extends React.Component{
         this.setState({list: updatedList})
         await fetch(`/api/room/${this.props.roomId}/list/${itemId}/check`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: getSecretEmployeeHeader([{'Content-Type': 'application/json'}]),
             body: JSON.stringify({[`${checkKey}`]: checkVal})
         })
         //fetch updated list
@@ -305,9 +303,7 @@ class List extends React.Component{
 
         await fetch(`/api/room/${this.props.roomId}/list`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: getSecretEmployeeHeader([{'Content-Type': 'application/json'}]),
             body: JSON.stringify(item)
         });
 
@@ -320,9 +316,7 @@ class List extends React.Component{
 
         await fetch(`/api/room/${this.props.roomId}/list/${itemID}`, {
             method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: getSecretEmployeeHeader([{'Content-Type': 'application/json'}]),
             body: JSON.stringify(item)
         });
 
@@ -330,7 +324,10 @@ class List extends React.Component{
     }
 
     async clearList(){
-        await fetch(`/api/room/${this.props.roomId}/list`, {method: 'DELETE'});
+        await fetch(`/api/room/${this.props.roomId}/list`, {
+            method: 'DELETE',
+            headers: getSecretAdminHeader([{'Content-Type': 'application/json'}])
+        });
         //Update list
         this.props.fetchNewList();
     }
@@ -340,9 +337,7 @@ class List extends React.Component{
         // Change room name in db
         let response = await fetch(`/api/room/${this.props.roomId}/changeName`,{
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: getSecretEmployeeHeader([{'Content-Type': 'application/json'}]),
             body: JSON.stringify({roomName: roomName})
         });
         if(response.status === 200){

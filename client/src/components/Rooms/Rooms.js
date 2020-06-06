@@ -3,7 +3,7 @@ import {withRouter} from 'react-router-dom';
 import {RiPlayListAddLine} from 'react-icons/ri';
 import {AiOutlineTag, AiFillDelete, AiOutlineUnorderedList} from 'react-icons/ai';
 import ConfirmModal from '../ConfirmModal/ConfirmModal';
-import {sortRooms, formatDayOfWeekFromRoomCode, isRoomCodeToday, getSecretHeader} from '../../utils/utils';
+import {sortRooms, formatDayOfWeekFromRoomCode, isRoomCodeToday, getSecretAdminHeader, getSecretEmployeeHeader} from '../../utils/utils';
 import './Rooms.scss';
 
 class Rooms extends React.Component{
@@ -37,7 +37,7 @@ class Rooms extends React.Component{
         if('roomCode' in params){
             let join = async() => {
                 let roomCode = params.roomCode;
-                if(roomCode.length === 6){
+                if(roomCode.length === 7){
                     await this.joinRemoteRoom(roomCode);
                 }
                 this.validateRooms();
@@ -100,9 +100,7 @@ class Rooms extends React.Component{
             // Hit backend with IDs found in local storage
             let response = await fetch('/api/room/getMatchingIds', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: getSecretEmployeeHeader([{'Content-Type': 'application/json'}]),
                 body: JSON.stringify(payload)
             });
             let roomsValidated = await response.json();
@@ -126,9 +124,7 @@ class Rooms extends React.Component{
         // Add todays rooms to local storage rooms
         let todaysResponse = await fetch('/api/room/getTimeframeRooms', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
+            headers: getSecretEmployeeHeader([{'Content-Type': 'application/json'}]),
         });
         
         let todaysRooms = await todaysResponse.json();
@@ -146,7 +142,7 @@ class Rooms extends React.Component{
 
     async createRoom(){
         let response = await fetch('/api/room', {
-            headers: getSecretHeader(),
+            headers: getSecretAdminHeader(),
             method: 'POST'
         });
         let room = await response.json();
@@ -161,7 +157,7 @@ class Rooms extends React.Component{
 
     async deleteRoom(roomId){
         await fetch(`/api/room/${roomId}`, {
-            headers: getSecretHeader(),
+            headers: getSecretAdminHeader(),
             method: 'DELETE'
         });
         let storageToSet = JSON.parse(localStorage.getItem('rooms'));
@@ -183,9 +179,7 @@ class Rooms extends React.Component{
         // Check if room exists in database
         let response = await fetch('/api/room/getRoomByCode', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: getSecretEmployeeHeader([{'Content-Type': 'application/json'}]),
             body: JSON.stringify({roomCode: remoteRoomCode})
         });
         let roomValidated = await response.json();
@@ -237,14 +231,11 @@ class Rooms extends React.Component{
         }
         let result = window.confirm(`Are you sure you want to change employee password to: ${this.state.employeePassword}`);
         if(result){
-            console.log('trying to change password to: ', this.state.employeePassword);
-           
             let response = await fetch(`/api/changeEmployeePassword`, {
                 method: 'POST',
-                headers: getSecretHeader([{'Content-Type': 'application/json'}]),
+                headers: getSecretAdminHeader([{'Content-Type': 'application/json'}]),
                 body: JSON.stringify({password: this.state.employeePassword})
             });
-            console.log(response.status);
         }
         this.setState({employeePassword: ''})
     }

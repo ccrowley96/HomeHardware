@@ -1,0 +1,67 @@
+@import '../../base_styles/colors.scss';
+
+.loginWrapper{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: darken($lightBlue, 0%);
+
+    .loginBox{
+        padding: 15px 15px 15px 15px;
+        max-width: 800px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        height: auto;
+        width: 100%;
+        background-color: rgba(255,255,255, .95);
+        border-radius: 10px;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        flex-direction: column;
+
+        .loginTitle{
+            font-size: x-large;
+        }
+        .loginSubtitle{
+            margin-top: 20px;
+            font-style: italic;
+            text-align: center;
+        }
+
+        .loginForm{
+            width:100%;
+        }
+
+        .passwordInput{
+            background-color: #DDDDDD;
+            font-size: x-large;
+            border-radius: 5px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            box-sizing:border-box;
+            width:100%;
+        }
+
+        .submitBtnWrap{
+            position: relative;
+            display: flex;
+            justify-content: flex-end;
+            button{
+                width: 100px;
+                height: 40px;
+            }
+        }
+
+        .formError{
+            color: $red;
+            position: absolute;
+            left: 0px;
+            top:12px;
+        }
+    }
+}
