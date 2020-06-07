@@ -1,6 +1,6 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom';
-import {isLoggedIn, updateEmployeePasswordRequired} from '../../utils/utils'
+import {isLoggedIn} from '../../utils/utils'
 import './Login.scss';
 
 class Login extends React.Component{
@@ -15,7 +15,13 @@ class Login extends React.Component{
     componentDidMount(){
         localStorage.removeItem('passwordRequired');
         localStorage.removeItem('employee');
-        if(isLoggedIn()) this.props.history.push('/rooms');
+        this.checkLoggedIn();
+    }
+
+    async checkLoggedIn(){
+        let loggedIn = await isLoggedIn();
+        console.log('checking logged in: ', loggedIn);
+        if(loggedIn) this.props.history.push('/rooms');
     }
 
     handlePasswordChange(e){
@@ -26,7 +32,6 @@ class Login extends React.Component{
 
     async handleSubmit(e){
         e.preventDefault();
-        if(isLoggedIn()) this.props.history.push('/rooms');
 
         if(this.state.password === ''){
             this.setState({formError: 'Password empty'})

@@ -103,6 +103,7 @@ class Rooms extends React.Component{
             let responseBody = await response.json();
             localStorage.setItem('admin', JSON.stringify({admin: true, secret: responseBody.secret}));
             this.setState({admin: true, joinRoomInfo: ''});
+            this.updateCurrentEmployeePassword();
         }
         else{
             this.setState({joinRoomInfo: 'Admin Password Incorrect.'})

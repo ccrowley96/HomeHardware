@@ -3,8 +3,8 @@ const randomstring = require('randomstring');
 
 moment().tz("America/Toronto").format();
 
-export function isLoggedIn(){
-    updateEmployeePasswordRequired();
+export async function isLoggedIn(){
+    await updateEmployeePasswordRequired();
     let loggedIn = false;
     
     let employee = JSON.parse(localStorage.getItem('employee'));
