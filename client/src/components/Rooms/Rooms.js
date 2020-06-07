@@ -2,6 +2,8 @@ import React from 'react';
 import {withRouter} from 'react-router-dom';
 import {RiPlayListAddLine} from 'react-icons/ri';
 import {AiOutlineTag, AiFillDelete, AiOutlineUnorderedList} from 'react-icons/ai';
+import {GrSecure} from 'react-icons/gr';
+import {FaUnlock} from 'react-icons/fa';
 import ConfirmModal from '../ConfirmModal/ConfirmModal';
 import {sortRooms, formatDayOfWeekFromRoomCode, isRoomCodeToday, getSecretAdminHeader, getSecretEmployeeHeader} from '../../utils/utils';
 import './Rooms.scss';
@@ -79,7 +81,8 @@ class Rooms extends React.Component{
         });
         if(response.status === 200){
             // Fetch new value
-            this.updateCurrentEmployeePassword();
+            await this.updateCurrentEmployeePassword();
+            this.verifyAndSetLocalEmployeePassword();
         }
     }
 
@@ -278,28 +281,31 @@ class Rooms extends React.Component{
                 headers: getSecretAdminHeader([{'Content-Type': 'application/json'}]),
                 body: JSON.stringify({password: this.state.employeePassword})
             });
+            await this.verifyAndSetLocalEmployeePassword();
+        }
+        this.setState({employeePassword: ''})
+        this.updateCurrentEmployeePassword();
+    }
 
-            response = await fetch('/api/verifyEmployee', 
+    async verifyAndSetLocalEmployeePassword(){
+        let response = await fetch('/api/verifyEmployee', 
                 {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({password: this.state.employeePassword})
+                    body: JSON.stringify({password: this.state.currentEmployeePassword})
                 }
-            );
+        );
 
-            if(response.status === 200){
-                let responseBody = await response.json();
-                let storageToSet = {
-                    loggedIn: true,
-                    secret: responseBody.secret,
-                };
-                localStorage.setItem('employee', JSON.stringify(storageToSet));
-            }
+        if(response.status === 200){
+            let responseBody = await response.json();
+            let storageToSet = {
+                loggedIn: true,
+                secret: responseBody.secret,
+            };
+            localStorage.setItem('employee', JSON.stringify(storageToSet));
         }
-        this.setState({employeePassword: ''})
-        this.updateCurrentEmployeePassword();
     }
 
     async displayNotes(){
@@ -482,13 +488,15 @@ class Rooms extends React.Component{
                         </div>
                         <div className="requireEmployeePassword">
                             <button 
-                                className={`${this.state.requireEmployeePassword ? 'green' : 'red'}`}
+                                className={`${!this.state.requireEmployeePassword ? 'green' : 'red'}`}
                                 onClick={() => this.clickRequireEmployeePassword()}
                             >
-                                Require Employee Password
+                                {this.state.requireEmployeePassword ? 'Disable Employee Password' : 'Require Employee Password'}
                             </button>
                             <div className={`requirePasswordText ${this.state.requireEmployeePassword ? ' required' : ''}`}>
-                                {this.state.requireEmployeePassword ? 'Employee password required' : 'No employee password required'}
+                                {this.state.requireEmployeePassword ? 
+                                    <div className="requirePasswordIconAndText">Employee password required <span className="requirePasswordIcon"><GrSecure /></span></div>
+                                    : <div className="requirePasswordIconAndText">Site open to public<span><FaUnlock className="requirePasswordIcon" /></span></div>}
                                 </div>
                         </div>
                     </div>

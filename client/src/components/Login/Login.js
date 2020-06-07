@@ -20,7 +20,6 @@ class Login extends React.Component{
 
     async checkLoggedIn(){
         let loggedIn = await isLoggedIn();
-        console.log('checking logged in: ', loggedIn);
         if(loggedIn) this.props.history.push('/rooms');
     }
 
@@ -73,7 +72,7 @@ class Login extends React.Component{
                     <form className="loginForm" onSubmit={(e) => this.handleSubmit(e)}>
                         <input 
                             className="passwordInput"
-                            type="password"
+                            type="text"
                             value={this.state.password} 
                             onChange={(e) => this.handlePasswordChange(e)}
                             placeholder={'Employee Password'} 
@@ -83,7 +82,7 @@ class Login extends React.Component{
                             <button type="submit" value="Submit" className="green">Log In</button>
                             <div className ="formError">{this.state.formError}</div>
                         </div>
-                        <div className="loginSubtitle">Log in to access Deka Home Hardware Listing Service</div>
+                        <div className="loginSubtitle">Log in to access Deka Home Hardware listing service</div>
                     </form>
                     
                 </div>

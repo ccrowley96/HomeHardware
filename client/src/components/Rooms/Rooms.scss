@@ -280,6 +280,7 @@
     .adminControlTitle{
         font-size: large;
         padding-bottom: 10px;
+        text-decoration: underline;
     }
 }
 
@@ -308,6 +309,7 @@
         border-radius: 5px;
         margin-bottom: 30px;
         @media screen and (max-width: 745px) {
+            width:185px;
             max-width:100%;
         }
     }
@@ -362,12 +364,26 @@
             font-size: medium;
         }
         height: 100%;
-        font-size: x-large;
+        font-size: large;
         padding-left: 10px;
         margin-bottom: 10px;
         color: $red;
         &.required{
             color: black;
+        }
+
+        .requirePasswordIconAndText{
+            display: flex;
+            align-items: center;
+            .requirePasswordIcon{
+                display: flex;
+                align-items: center;
+                padding-left: 10px;
+                font-size: xx-large;
+                @media screen and (max-width: 745px){
+                    font-size: x-large;
+                }
+            }
         }
     }
 }
