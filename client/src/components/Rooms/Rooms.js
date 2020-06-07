@@ -15,6 +15,9 @@ class Rooms extends React.Component{
             joinRoomInfo: '',
             employeePassword: '',
             empoloyeePasswordInfo: '',
+            viewEmployeePassword: false,
+            requireEmployeePassword: false,
+            currentEmployeePassword: '',
             confirmOpen: false,
             note: '',
             store: 'woodlawn'
@@ -33,7 +36,6 @@ class Rooms extends React.Component{
         if(!admin) admin = false;
         this.setState({rooms: localRoomsObj, admin, store});
         // this.setState({admin, store});
-       
         if('roomCode' in params){
             let join = async() => {
                 let roomCode = params.roomCode;
@@ -47,12 +49,38 @@ class Rooms extends React.Component{
             //Validate rooms
             this.validateRooms();
         }
+        if(admin) this.updateCurrentEmployeePassword();
         this.displayNotes();
     }
 
 
     componentWillUnmount(){
         clearTimeout(this.noteTimeout);
+    }
+
+    async updateCurrentEmployeePassword(){
+        let response = await fetch('/api/viewEmployeePassword', {
+            method: 'GET',
+            headers: getSecretAdminHeader([{'Content-Type': 'application/json'}]),
+        });
+        if(response.status === 200){
+            let responseBody = await response.json();
+            this.setState({currentEmployeePassword: responseBody.password, requireEmployeePassword: responseBody.required});
+        } else{
+            this.setState({currentEmployeePassword: 'Not Authorized'});
+        }
+    }
+
+    async clickRequireEmployeePassword(){
+        let response = await fetch(`/api/setEmployeePasswordRequired`, {
+            method: 'POST',
+            headers: getSecretAdminHeader([{'Content-Type': 'application/json'}]),
+            body: JSON.stringify({required: !this.state.requireEmployeePassword})
+        });
+        if(response.status === 200){
+            // Fetch new value
+            this.updateCurrentEmployeePassword();
+        }
     }
 
     async adminBtnClick(){
@@ -75,7 +103,8 @@ class Rooms extends React.Component{
             let responseBody = await response.json();
             localStorage.setItem('admin', JSON.stringify({admin: true, secret: responseBody.secret}));
             this.setState({admin: true, joinRoomInfo: ''});
-        } else{
+        }
+        else{
             this.setState({joinRoomInfo: 'Admin Password Incorrect.'})
         }
     }
@@ -103,6 +132,9 @@ class Rooms extends React.Component{
                 headers: getSecretEmployeeHeader([{'Content-Type': 'application/json'}]),
                 body: JSON.stringify(payload)
             });
+            if(response.status === 401) {
+                this.props.history.push('/login')
+            };
             let roomsValidated = await response.json();
             // Filter out missing IDs
             let filteredLocalRooms = localRooms.filter(room => roomsValidated.matchingRooms.findIndex(matchID => room.roomId === matchID._id) !== -1)
@@ -126,6 +158,11 @@ class Rooms extends React.Component{
             method: 'POST',
             headers: getSecretEmployeeHeader([{'Content-Type': 'application/json'}]),
         });
+
+        if(todaysResponse.status === 401){
+            this.props.history.push('/login');
+            return;
+        }
         
         let todaysRooms = await todaysResponse.json();
 
@@ -183,7 +220,11 @@ class Rooms extends React.Component{
             body: JSON.stringify({roomCode: remoteRoomCode})
         });
         let roomValidated = await response.json();
-        if(response.status === 406){
+        if(response.status === 401){
+            this.props.history.push('/login');
+            return;
+        }
+        else if(response.status === 406){
             this.setState({joinRoomInfo: 'Date must be within 1 year'})
         }
         else if(roomValidated.match == null){
@@ -236,8 +277,28 @@ class Rooms extends React.Component{
                 headers: getSecretAdminHeader([{'Content-Type': 'application/json'}]),
                 body: JSON.stringify({password: this.state.employeePassword})
             });
+
+            response = await fetch('/api/verifyEmployee', 
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({password: this.state.employeePassword})
+                }
+            );
+
+            if(response.status === 200){
+                let responseBody = await response.json();
+                let storageToSet = {
+                    loggedIn: true,
+                    secret: responseBody.secret,
+                };
+                localStorage.setItem('employee', JSON.stringify(storageToSet));
+            }
         }
         this.setState({employeePassword: ''})
+        this.updateCurrentEmployeePassword();
     }
 
     async displayNotes(){
@@ -271,6 +332,7 @@ class Rooms extends React.Component{
     }
 
     render(){
+        let employeePasswordPlaceholder = '*'.repeat(this.state.currentEmployeePassword.length);
         //TODO sort rooms by date most recent first
         let sortedRooms = this.state.rooms;
         if(this.state.store !== 'custom' && sortedRooms){
@@ -384,28 +446,54 @@ class Rooms extends React.Component{
                         }
                 </div>
                 {this.state.admin ?
-                    <form onSubmit={(e) => this.handleEmployeePasswordSubmit(e)} className="changePasswordForm">
-                        <button 
-                                className="red employeePasswordBtn"
-                                onClick={() => {}}
-                                type='submit'
-                                value="Submit" 
-                        >
-                            Change Employee Password
-                        </button>
-                        <input
-                            type="text" 
-                            value={this.state.employeePassword} 
-                            onChange={(e) => this.handlePasswordInputChange(e)}
-                            placeholder={`********`}
-                            className="passwordInput"
-                            maxLength={14}
-                        >
-                        </input>
-                        <label className="employeePasswordInfo">{this.state.employeePasswordInfo}</label>
-                    </form>
+                    <div className="adminControls">
+                        <div className="adminControlTitle">
+                            Admin Control Panel
+                        </div>
+                        <form onSubmit={(e) => this.handleEmployeePasswordSubmit(e)} className="changePasswordForm">
+                            <button 
+                                    className="red employeePasswordBtn"
+                                    onClick={() => {}}
+                                    type='submit'
+                                    value="Submit" 
+                            >
+                                Change Employee Password
+                            </button>
+                            <input
+                                type="text" 
+                                value={this.state.employeePassword} 
+                                onChange={(e) => this.handlePasswordInputChange(e)}
+                                placeholder={`********`}
+                                className="passwordInput"
+                                maxLength={14}
+                            >
+                            </input>
+                            <label className="employeePasswordInfo">{this.state.employeePasswordInfo}</label>
+                        </form>
+                        <div className="viewEmployeePassword">
+                            <button 
+                                className="yellow"
+                                onClick={() => this.setState((prevState) => ({viewEmployeePassword: !prevState.viewEmployeePassword}))}
+                            >
+                                {this.state.viewEmployeePassword ? 'Hide Employee Password' : 'View Employee Password'}
+                            </button>
+                            <div className="employeePasswordText">{this.state.viewEmployeePassword ? this.state.currentEmployeePassword : employeePasswordPlaceholder}</div>
+                        </div>
+                        <div className="requireEmployeePassword">
+                            <button 
+                                className={`${this.state.requireEmployeePassword ? 'green' : 'red'}`}
+                                onClick={() => this.clickRequireEmployeePassword()}
+                            >
+                                Require Employee Password
+                            </button>
+                            <div className={`requirePasswordText ${this.state.requireEmployeePassword ? ' required' : ''}`}>
+                                {this.state.requireEmployeePassword ? 'Employee password required' : 'No employee password required'}
+                                </div>
+                        </div>
+                    </div>
                  : null
                 }
+                   
                 <div className="notes">
                     <p><i>{this.state.note}</i></p>
                 </div>

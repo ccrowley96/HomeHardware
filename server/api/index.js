@@ -3,6 +3,7 @@ const router = express.Router();
 const room = require('./room');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv').config();
+const {generateSecret} = require('./utils');
 const { Employee } = require('../db/db_index');
 const {validateAdmin} = require('./middleware');
 
@@ -59,12 +60,13 @@ router.post('/verifyEmployee', async (req,res, next) => {
 
   let employee = await Employee.findOne({});
   let employeePassword = employee.password;
+  let employeeSecret = employee.secret;
 
   if(req.body.password === process.env.ADMIN_PASSWORD || req.body.password === employeePassword){
     res.status(200);
     res.json({
       title: 'Employee',
-      secret: process.env.EMPLOYEE_SECRET
+      secret: employeeSecret
     })
     return;
   } 
@@ -84,7 +86,47 @@ router.post('/changeEmployeePassword', validateAdmin, async (req,res,next) => {
 
   // Update employee password in DB
   await Employee.updateOne({}, {
-    "$set": {"password" : password}
+    "$set": {"password" : password, "secret": generateSecret()}
+  });
+  res.sendStatus(200);
+});
+
+// View Employee password
+router.get('/viewEmployeePassword', validateAdmin, async (req, res, next) => {
+  let employee = await Employee.findOne({});
+  let employeePassword = employee.password;
+  let required = employee.passwordRequired;
+  res.status(200);
+
+  res.json({
+    title: 'EmployeePassword',
+    password: employeePassword,
+    required: required
+  })
+});
+
+// See if employee password required
+router.get('/isEmployeePasswordRequired', async (req, res, next) => {
+  let employee = await Employee.findOne({});
+  let required = employee.passwordRequired;
+  res.status(200);
+  res.json({
+    title: 'IsEmployeePasswordRequired',
+    required
+  })
+})
+
+router.post('/setEmployeePasswordRequired', validateAdmin, async (req, res, next) => {
+  let required = req.body.required;
+  if(required === null || typeof required !== 'boolean'){
+    res.status(400);
+    res.send('Incorrect request body (see required (bool))');
+    return;
+  }
+
+  // Update employee password in DB
+  await Employee.updateOne({}, {
+    "$set": {"passwordRequired" : required}
   })
   res.sendStatus(200);
 });

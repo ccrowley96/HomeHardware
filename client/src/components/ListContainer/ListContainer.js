@@ -25,7 +25,8 @@ class App extends React.Component {
 
     fetch(`/api/room/${roomId}/list`, {headers: getSecretEmployeeHeader()})
       .then(response => {
-        if(response.status !== 200){
+        if(response.status === 401) this.props.history.push('/login');
+        else if(response.status !== 200){
           this.props.history.push('/rooms');
           throw new Error('Room not found');
         }
@@ -68,11 +69,13 @@ class App extends React.Component {
   async handleCheckAllClick(){
     let onClickCheckState = !this.state.checkAll;
     this.setState(prevState => ({checkAll: !prevState.checkAll, checkDisabled: true}));
-    await fetch(`/api/room/${this.state.activeRoomID}/list/checkAll`, {
+    let response = await fetch(`/api/room/${this.state.activeRoomID}/list/checkAll`, {
         method: 'POST',
         headers: getSecretEmployeeHeader([{'Content-Type': 'application/json'}]),
         body: JSON.stringify({checked: onClickCheckState})
     });
+    if(response.status === 401) this.props.history.push('/login');
+
     this.updateList();
   }
 

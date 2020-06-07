@@ -15,7 +15,13 @@ class Print extends React.Component{
 
     updateList(roomId){
         fetch(`/api/room/${roomId}/list`, {headers: getSecretEmployeeHeader()})
-          .then(response => response.json())
+          .then(response => {
+                if(response.status === 401){
+                    this.props.history.push('/login');
+                    throw new Error('Not logged in!')
+                } 
+                return response.json()
+            })
           .then(list => {
             this.setState({list})
           })

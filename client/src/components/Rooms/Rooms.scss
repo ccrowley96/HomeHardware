@@ -273,15 +273,28 @@
     }
 }
 
+.adminControls{
+    background-color: #dddddd;
+    border-radius: 10px;
+    padding: 20px 20px 20px 20px;
+    .adminControlTitle{
+        font-size: large;
+        padding-bottom: 10px;
+    }
+}
+
 .changePasswordForm{
     display: flex;
     flex-direction: row;
-    margin-bottom: 20px;
     position: relative;
+    flex-wrap: wrap;
 
     .employeePasswordBtn{
         font-size: large;
         min-width: 185px;
+        height: 36px;
+        margin-bottom: 30px;
+        margin-right: 20px;
         @media screen and (max-width: 745px){
             font-size: small;
         }
@@ -289,16 +302,13 @@
 
     .passwordInput{
         align-items: center;
-        // width: 150px;
-        background-color: #dddddd;
+        background-color: white;
         height: 30px;
         font-size: x-large;
         border-radius: 5px;
-        margin-left:20px;
-
+        margin-bottom: 30px;
         @media screen and (max-width: 745px) {
-            width:100%;
-            // margin-left:auto;
+            max-width:100%;
         }
     }
 
@@ -307,5 +317,57 @@
         color: $red;
         top:45px;
         // right:5px;
+    }
+}
+
+.viewEmployeePassword{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    button{
+        font-size: large;
+        min-width: 185px;
+        height: 36px;
+        @media screen and (max-width: 745px){
+            font-size: small;
+        }
+        margin-right: 20px;
+        margin-bottom: 15px;
+    }
+    .employeePasswordText{
+        height: 100%;
+        font-size: large;
+        padding-left: 10px;
+        margin-bottom: 15px;
+    }
+}
+
+.requireEmployeePassword{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    button{
+        font-size: large;
+        min-width: 185px;
+        height: 36px;
+        @media screen and (max-width: 745px){
+            font-size: small;
+        }
+        margin-right: 20px;
+        margin-bottom: 10px;
+    }
+    .requirePasswordText{
+        @media screen and (max-width: 745px){
+            font-size: medium;
+        }
+        height: 100%;
+        font-size: x-large;
+        padding-left: 10px;
+        margin-bottom: 10px;
+        color: $red;
+        &.required{
+            color: black;
+        }
     }
 }

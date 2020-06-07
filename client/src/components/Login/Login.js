@@ -1,6 +1,6 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom';
-import {isLoggedIn} from '../../utils/utils'
+import {isLoggedIn, updateEmployeePasswordRequired} from '../../utils/utils'
 import './Login.scss';
 
 class Login extends React.Component{
@@ -13,6 +13,8 @@ class Login extends React.Component{
     }
 
     componentDidMount(){
+        localStorage.removeItem('passwordRequired');
+        localStorage.removeItem('employee');
         if(isLoggedIn()) this.props.history.push('/rooms');
     }
 
@@ -24,6 +26,7 @@ class Login extends React.Component{
 
     async handleSubmit(e){
         e.preventDefault();
+        if(isLoggedIn()) this.props.history.push('/rooms');
 
         if(this.state.password === ''){
             this.setState({formError: 'Password empty'})
@@ -44,7 +47,7 @@ class Login extends React.Component{
             let responseBody = await response.json();
             let storageToSet = {
                 loggedIn: true,
-                secret: responseBody.secret
+                secret: responseBody.secret,
             };
             localStorage.setItem('employee', JSON.stringify(storageToSet));
             let redirect = this.props.location?.state?.from;

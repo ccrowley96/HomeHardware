@@ -10,7 +10,6 @@ import {isLoggedIn} from '../../utils/utils';
 const PrivateRoute = ({ component: Component, ...rest }) => {
 
   const authorized = isLoggedIn();
-
   return (
     <Route
       {...rest}

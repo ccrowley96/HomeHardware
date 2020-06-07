@@ -1,4 +1,5 @@
 const moment = require('moment-timezone');
+const randomstring = require('randomstring');
 const CronJob = require('cron').CronJob;
 const {Item, Room, Employee } = require('../db/db_index');
 
@@ -56,13 +57,21 @@ exports.scheduleListCreator = () => {
       });
 }
 
+exports.generateSecret = () => {
+    let roomCode = randomstring.generate({
+        length: 12,
+    }).toLowerCase();
+    return roomCode
+}
+
 exports.createOrVerifyEmployeePassword = async () => {
     // Check if entry is already in Employee
     let employeeDbCount = await Employee.find().count();
     if(employeeDbCount === 0){
         // Create new employee entry with password
         const employee = new Employee({
-            password: process.env.DEFAULT_EMPLOYEE_PASSWORD
+            password: process.env.DEFAULT_EMPLOYEE_PASSWORD,
+            secret: exports.generateSecret()
         })
         employee.save();
     } else{

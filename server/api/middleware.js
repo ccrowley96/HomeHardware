@@ -1,4 +1,4 @@
-const {Room } = require('../db/db_index');
+const {Room, Employee} = require('../db/db_index');
 var ObjectId = require('mongoose').Types.ObjectId; 
 
 const secondsUntilExpire = 1000 * 60 * 60 * 24 * 30; // 30 days in seconds
@@ -79,7 +79,12 @@ exports.validateAdmin = async (req, res, next) => {
 
 exports.validateEmployee = async (req, res, next) => {
     let secret = req.headers.secret;
-    if(!secret || secret !== process.env.EMPLOYEE_SECRET){
+
+    let employee = await Employee.findOne({});
+    let required = employee.passwordRequired;
+    let employeeSecret = employee.secret;
+
+    if(required && (!secret || secret !== employeeSecret)){
         res.status(401);
         res.send('Employee action not authorized.  Please log into employee mode.');
         return;

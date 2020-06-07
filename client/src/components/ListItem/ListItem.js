@@ -1,5 +1,6 @@
 import React from 'react';
 import ConfirmModal from '../ConfirmModal/ConfirmModal';
+import {withRouter} from 'react-router-dom';
 import {GrEdit} from 'react-icons/gr';
 import {AiFillDelete, AiFillCheckCircle} from 'react-icons/ai';
 import {MdRadioButtonUnchecked} from 'react-icons/md';
@@ -104,15 +105,15 @@ class ListItem extends React.Component{
     
 
     async clickDelete(){
-        await fetch(`/api/room/${this.props.roomId}/list/${this.props.item._id}`,
+        let response = await fetch(`/api/room/${this.props.roomId}/list/${this.props.item._id}`,
             {
                 headers: getSecretAdminHeader(),
                 method: 'DELETE',
-
             });
+        
         //fetch updated list
         this.props.fetchNewList();
     }
 }
 
-export default ListItem;
+export default withRouter(ListItem);

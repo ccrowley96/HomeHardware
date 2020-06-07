@@ -282,11 +282,12 @@ class List extends React.Component{
 
         //Set temporary check state
         this.setState({list: updatedList})
-        await fetch(`/api/room/${this.props.roomId}/list/${itemId}/check`, {
+        let response = await fetch(`/api/room/${this.props.roomId}/list/${itemId}/check`, {
             method: 'POST',
             headers: getSecretEmployeeHeader([{'Content-Type': 'application/json'}]),
             body: JSON.stringify({[`${checkKey}`]: checkVal})
         })
+        if(response.status === 401) this.props.history.push('/login');
         //fetch updated list
         // Fetch new list after delay
         clearTimeout(this.state.delayedCheck);
@@ -301,11 +302,12 @@ class List extends React.Component{
     async addItem(item){
         this.setState({addOpen: false});
 
-        await fetch(`/api/room/${this.props.roomId}/list`, {
+        let response = await fetch(`/api/room/${this.props.roomId}/list`, {
             method: 'POST',
             headers: getSecretEmployeeHeader([{'Content-Type': 'application/json'}]),
             body: JSON.stringify(item)
         });
+        if(response.status === 401) this.props.history.push('/login');
 
         this.props.fetchNewList();
     }
