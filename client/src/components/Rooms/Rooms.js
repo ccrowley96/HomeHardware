@@ -1,7 +1,7 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom';
 import {RiPlayListAddLine} from 'react-icons/ri';
-import {AiOutlineTag, AiFillDelete, AiOutlineUnorderedList} from 'react-icons/ai';
+import {AiOutlineTag, AiFillDelete, AiOutlineUnorderedList, AiOutlineNumber} from 'react-icons/ai';
 import {GrSecure} from 'react-icons/gr';
 import {FaUnlock} from 'react-icons/fa';
 import ConfirmModal from '../ConfirmModal/ConfirmModal';
@@ -147,12 +147,16 @@ class Rooms extends React.Component{
                 if(!activeRoomOk) localStorage.setItem('activeRoom', null);
             }
 
-            // Change local room names
+            // Change local room names && Add room item counts
             filteredLocalRooms = filteredLocalRooms.map(localRoom => {
-                let remoteName = roomsValidated.matchingRooms.find(room => room._id === localRoom.roomId).roomName
+                let roomMatch = roomsValidated.matchingRooms.find(room => room._id === localRoom.roomId);
+                let remoteName = roomMatch.roomName;
+                let itemCount = roomMatch.roomList.length;
                 localRoom.roomName = remoteName;
+                localRoom.itemCount = itemCount;
                 return localRoom;
             })
+
             // Update local storage
             localStorage.setItem('rooms', JSON.stringify(filteredLocalRooms));
         }
@@ -173,8 +177,15 @@ class Rooms extends React.Component{
         localRooms = JSON.parse(localStorage.getItem('rooms'));
         for(let room of todaysRooms.matchingRooms){
             if(localRooms && localRooms.findIndex(el => el.roomId === room._id) !== -1) continue;
-            if(localRooms) localRooms.push({roomId: room._id, roomCode: room.roomCode, roomName: room.roomName});
-            else localRooms = [{roomId: room._id, roomCode: room.roomCode, roomName: room.roomName}]
+            if(localRooms) {
+                localRooms.push({
+                    roomId: room._id, 
+                    roomCode: room.roomCode, 
+                    roomName: room.roomName,
+                    itemCount: room.roomList.length
+                });
+            }
+            else localRooms = [{roomId: room._id, roomCode: room.roomCode, roomName: room.roomName, itemCount: room.roomList.length}]
         }
         localStorage.setItem('rooms', JSON.stringify(localRooms));
        
@@ -404,6 +415,7 @@ class Rooms extends React.Component{
                             return (
                                 <RoomItem
                                     key={room.roomId}
+                                    itemCount={room.itemCount}
                                     roomName={room.roomName}
                                     room={room} 
                                     joinMyRoom={this.joinMyRoom.bind(this)}
@@ -420,6 +432,7 @@ class Rooms extends React.Component{
                                 isToday={isRoomCodeToday(room.roomCode)}
                                 key={room.roomId}
                                 roomName={room.roomName}
+                                itemCount={room.itemCount}
                                 room={room} 
                                 joinMyRoom={this.joinMyRoom.bind(this)}
                                 deleteRoom={this.deleteRoom.bind(this)}
@@ -529,6 +542,10 @@ class RoomItem extends React.Component{
                     {this.props.room.roomName} <span className="dayOfWeek">&nbsp;-&nbsp;{formatDayOfWeekFromRoomCode(this.props.room.roomCode)}</span>
                 </div>
                 <div className="roomTools">
+                    <div className="itemCount">
+                        <AiOutlineNumber className="roomCodeIcon"/>
+                        {this.props.room.itemCount}
+                    </div>
                     <div className="roomCode">
                         <AiOutlineTag className="roomCodeIcon"/>
                         {this.props.room.roomCode}
