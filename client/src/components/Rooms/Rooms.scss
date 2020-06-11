@@ -245,10 +245,19 @@
         padding-left: 10px;
         padding-right: 16px;
         .dayOfWeek{
+            padding-left:10px;
+            font-size:16px;
             color: lighten(black, 30%);
             @media screen and (max-width: 530px){
-                display: none;
+                // display: none;
+                position: absolute;
+                top:28px;
+                font-size: small;
+                padding-left:2px;
             }
+        }
+        @media screen and (max-width: 530px){
+            margin-top:-10px;
         }
     }
     .roomTools{

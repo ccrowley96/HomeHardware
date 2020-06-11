@@ -250,7 +250,8 @@ class Rooms extends React.Component{
             let storageToSet = JSON.parse(localStorage.getItem('rooms'));
             let roomId = roomValidated.match._id, 
                 roomCode = roomValidated.match.roomCode,
-                roomName = roomValidated.match.roomName;
+                roomName = roomValidated.match.roomName,
+                itemCount = roomValidated.match.roomList.length;
 
             // Ignore if room already in localStorage
             if(storageToSet && storageToSet.findIndex(room => room.roomId === roomId) !== -1){
@@ -258,8 +259,8 @@ class Rooms extends React.Component{
                 return;
             }
 
-            if(storageToSet) storageToSet.push({roomId, roomCode, roomName});
-            else storageToSet = [{roomId, roomCode, roomName}]
+            if(storageToSet) storageToSet.push({roomId, roomCode, roomName, itemCount});
+            else storageToSet = [{roomId, roomCode, roomName, itemCount}]
 
             localStorage.setItem('rooms', JSON.stringify(storageToSet));
             this.updateRooms();
@@ -539,7 +540,7 @@ class RoomItem extends React.Component{
                     onClick={() => this.props.joinMyRoom(this.props.room.roomId, this.props.room.roomCode, this.props.room.roomName)}>
                 </div>
                 <div className="roomName" >
-                    {this.props.room.roomName} <span className="dayOfWeek">&nbsp;-&nbsp;{formatDayOfWeekFromRoomCode(this.props.room.roomCode)}</span>
+                    {this.props.room.roomName} <span className="dayOfWeek">{formatDayOfWeekFromRoomCode(this.props.room.roomCode)}</span>
                 </div>
                 <div className="roomTools">
                     <div className="itemCount">
