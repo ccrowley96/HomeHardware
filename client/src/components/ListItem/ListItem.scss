@@ -91,6 +91,9 @@
 }
 
 .listToolsWrapper{
+    &.itemFooter{
+        margin-bottom: 10px;
+    }
     .tool{
         height: 80%;
         margin-right:10px;
@@ -115,6 +118,14 @@
         display: flex;
         flex-direction: row;
         width: calc(100% - 40px);
+
+        .initial{
+            // color:red;
+            font-style: italic;
+            position: absolute;
+            top: 23px;
+            left: 43px;
+        }
     }
     .listInfo{
         display: flex;

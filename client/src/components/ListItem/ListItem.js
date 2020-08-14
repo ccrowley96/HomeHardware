@@ -6,13 +6,16 @@ import {AiFillDelete, AiFillCheckCircle} from 'react-icons/ai';
 import {MdRadioButtonUnchecked} from 'react-icons/md';
 import {getSecretAdminHeader} from '../../utils/utils';
 import './ListItem.scss';
+import InitialModal from '../InitialModal/InitialModal';
 
 class ListItem extends React.Component{
     constructor(props){
         super(props);
 
         this.state = {
-            confirmOpen: false
+            confirmOpen: false,
+            initialValue: null,
+            initialKey: null
         };
     }
 
@@ -26,6 +29,19 @@ class ListItem extends React.Component{
                         confirm={() => {
                             this.clickDelete();
                             this.setState({confirmOpen: false});
+                        }}
+                    /> : null
+                }
+
+                {this.state.initialOpen ?
+                    <InitialModal
+                        triggerClose={() => {this.props.changeInitialsOpen(false); this.setState({initialKey: null, initialValue: null, initialOpen: false})}}
+                        context={this.state.initialKey}
+                        message={`Please Initial`}
+                        confirm={(initials) => {
+                            this.props.clickCheck(this.props.item._id, this.state.initialValue, this.state.initialKey, initials)
+                            this.setState({initialOpen: false})
+                            this.props.changeInitialsOpen(false);
                         }}
                     /> : null
                 }
@@ -46,6 +62,9 @@ class ListItem extends React.Component{
                     <div className='description listContent'>
                         <b>Details:</b> &nbsp;{this.props.item.description}
                     </div>
+                    <div className='salesID listContent'>
+                        <b>Sales ID:</b> &nbsp;{this.props.item.salesID}
+                    </div>
                     {this.props.item.edited ?
                     <div className='description listContent'>
                         <b>modified</b> &nbsp; @ &nbsp;{this.props.item.editDate}
@@ -54,13 +73,15 @@ class ListItem extends React.Component{
                 </div>
                 <div className={`listToolsWrapper`}>
                     <div className = "listTools">
-                        <div onClick={() => this.props.clickCheck(this.props.item._id, !this.props.item.picked, 'picked')} className={`tool`}>
+                        <div onClick={() => {this.setState({initialOpen: true, initialValue: !this.props.item.picked, initialKey: 'picked'}); this.props.changeInitialsOpen(true); }} className={`tool`}>
                             {this.props.item.picked ? <AiFillCheckCircle className="listItemToolIcon checkIcon"/> : <MdRadioButtonUnchecked className="listItemToolIcon checkIcon"/>}
                             <div className="toolLabel">Picked</div>
+                            {this.props.item.pickedBy ? <div className="initial">({this.props.item.pickedBy})</div> : null}
                         </div>
-                        <div onClick={() => this.props.clickCheck(this.props.item._id, !this.props.item.dispatched, 'dispatched')} className={`tool`}>
+                        <div onClick={() => {this.setState({initialOpen: true, initialValue: !this.props.item.dispatched, initialKey: 'dispatched'}); this.props.changeInitialsOpen(true); }} className={`tool`}>
                             {this.props.item.dispatched ? <AiFillCheckCircle className="listItemToolIcon checkIcon"/> : <MdRadioButtonUnchecked className="listItemToolIcon checkIcon"/>}
                             <div className="toolLabel">Dispatched</div>
+                            {this.props.item.dispatchedBy ? <div className="initial">({this.props.item.dispatchedBy})</div> : null}
                         </div>
                         
                     </div>
@@ -70,19 +91,18 @@ class ListItem extends React.Component{
                         </div> : null
                     }
                 </div>
-                <div className={`listToolsWrapper`}>
+                <div className={`listToolsWrapper itemFooter`}>
                     <div className = "listTools">
-                        <div onClick={() => this.props.clickCheck(this.props.item._id, !this.props.item.complete, 'complete')} className={`tool`}>
+                        <div onClick={() => {this.setState({initialOpen: true, initialValue: !this.props.item.complete, initialKey: 'complete'}); this.props.changeInitialsOpen(true);}} className={`tool`}>
                             {this.props.item.complete ? <AiFillCheckCircle className="listItemToolIcon checkIcon"/> : <MdRadioButtonUnchecked className="listItemToolIcon checkIcon"/>}
                             <div className="toolLabel">Complete</div>
-
+                            {this.props.item.completeBy ? <div className="initial">({this.props.item.completeBy})</div> : null}
                         </div>
-                        <div onClick={() => this.props.clickCheck(this.props.item._id, !this.props.item.cancelled, 'cancelled')} className={`tool`}>
+                        <div onClick={() => {this.setState({initialOpen: true, initialValue: !this.props.item.cancelled, initialKey: 'cancelled'}); this.props.changeInitialsOpen(true);}} className={`tool`}>
                             {this.props.item.cancelled ? <AiFillCheckCircle className="listItemToolIcon checkIcon"/> : <MdRadioButtonUnchecked className="listItemToolIcon checkIcon"/>}
                             <div className="toolLabel">Cancelled</div>
+                            {this.props.item.cancelledBy ? <div className="initial">({this.props.item.cancelledBy})</div> : null}
                         </div>
-                        
-                        
                     </div>
                     <div className = "editBtn">
                         <div className={``}>
@@ -101,8 +121,6 @@ class ListItem extends React.Component{
             </div>
         );
     }
-
-    
 
     async clickDelete(){
         let response = await fetch(`/api/room/${this.props.roomId}/list/${this.props.item._id}`,

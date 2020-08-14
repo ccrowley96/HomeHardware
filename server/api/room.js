@@ -244,14 +244,15 @@ router.get('/:id/list', validateEmployee, validateRoom, async (req, res, next) =
 router.post('/:id/list', validateEmployee, validateRoom, async (req, res, next) => {
     let roomId = req.params.id;
     
-    if(!req.body.invoice || !req.body.address || !req.body.name){
+    if(!req.body.invoice || !req.body.address || !req.body.name || !req.body.salesID){
         res.status(400);
-        res.send('Incorrect request body (see invoice and address and name)');
+        res.send('Incorrect request body (see invoice and address and name) and salesID');
         return;
     }
 
     let itemObj = {
         name: req.body.name,
+        salesID: req.body.salesID,
         address: req.body.address,
         invoice: req.body.invoice,
         description: req.body.description
@@ -275,15 +276,16 @@ router.put('/:id/list/:item_id', validateEmployee, validateRoom, validateItem, a
     let roomId = req.params.id;
     let itemId = req.params.item_id;
     
-    if(!req.body.address || !req.body.name || !req.body.invoice){
+    if(!req.body.address || !req.body.name || !req.body.invoice || !req.body.salesID){
         res.status(400);
-        res.send('Incorrect request body (body needs address and name and description and invoice)');
+        res.send('Incorrect request body (body needs address and name and description and invoice and salesID)');
         return;
     }
     try{
         await Room.findOneAndUpdate({'_id': new ObjectId(roomId), 'roomList._id': new ObjectId(itemId)},
             {$set: {
-                "roomList.$.name": req.body.name, 
+                "roomList.$.name": req.body.name,
+                "roomList.$.salesID": req.body.salesID, 
                 "roomList.$.address": req.body.address,
                 "roomList.$.description": req.body.description,
                 "roomList.$.invoice": req.body.invoice,
@@ -303,25 +305,31 @@ router.post('/:id/list/:item_id/check', validateEmployee, validateRoom, validate
     let roomId = req.params.id;
     let itemId = req.params.item_id;
 
-    if(Object.keys(req.body).length > 1){
+    if(Object.keys(req.body.change).length > 1){
         res.status(400);
-        res.send("Incorrect request body; body must only have one key");
+        res.send("Incorrect request body; change must only have one key");
     }
     
-    for(let key of Object.keys(req.body)){
+    for(let key of Object.keys(req.body.change)){
         if(['picked', 'dispatched', 'complete', 'cancelled'].indexOf(key) === -1 && typeof key !== 'boolean'){
             res.status(400);
-            res.send("Incorrect request body one of ['picked', 'dispatched', 'complete', 'cancelled'] must be in body and be of type boolean");
+            res.send("Incorrect request body one of ['picked', 'dispatched', 'complete', 'cancelled'] must be in change param and be of type boolean");
             return;
         }
     }
 
-    let checkName = Object.keys(req.body)[0];
+    let checkName = Object.keys(req.body.change)[0];
+    let initials = req.body.initials;
 
     // Toggle checked
     try{
         await Room.findOneAndUpdate({'_id': new ObjectId(roomId), 'roomList._id': new ObjectId(itemId)},
-            {$set: {[`roomList.$.${checkName}`]: req.body[checkName]}}
+            {
+                $set: {
+                    [`roomList.$.${checkName}`]: req.body.change[checkName],
+                    [`roomList.$.${checkName}By`]: initials
+                }
+            }
         )
         res.sendStatus(200);
     } catch(err){

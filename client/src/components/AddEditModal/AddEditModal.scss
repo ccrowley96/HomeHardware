@@ -12,6 +12,9 @@
     background-color: rgba(255,255,255, .8);
 
     .addEditModal{
+        @media screen and (min-width: 600px) {
+            border: 1px solid black;
+        }
         max-width: 500px;
         padding-top: 20px;
         padding-bottom: 20px;

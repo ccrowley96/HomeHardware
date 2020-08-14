@@ -25,6 +25,7 @@ class List extends React.Component{
             addOpen: false,
             edit: {open: false, data: null},
             editNameOpen: false,
+            initialsOpen: false,
             copied: false
         };
         this.hotKeyListener = this.hotKeyListener.bind(this);
@@ -35,8 +36,8 @@ class List extends React.Component{
         let addKeyCodes = [65, 32,13];
         let closeKeyCodes = [27];
 
-        let {confirmOpen, addOpen, edit, editNameOpen} = this.state;
-        let modalOpen = confirmOpen || addOpen || edit.open || editNameOpen;
+        let {confirmOpen, addOpen, edit, editNameOpen, initialsOpen} = this.state;
+        let modalOpen = confirmOpen || addOpen || edit.open || editNameOpen || initialsOpen;
         if(addKeyCodes.includes(event.keyCode) && !modalOpen){
             event.preventDefault();
             this.setState({addOpen: true})
@@ -78,7 +79,9 @@ class List extends React.Component{
                             edit={(data) => {
                                 this.setState({edit: {open: true, data}})
                             }}
-                            clickCheck={(id, checkVal, checkKey) => this.clickCheck(id, checkVal, checkKey)}
+                            changeInitialsOpen={(val) => this.setState({initialsOpen: val})}
+                            initialsOpen={this.state.initialsOpen}
+                            clickCheck={(id, checkVal, checkKey, initials) => this.clickCheck(id, checkVal, checkKey, initials)}
                             admin={this.props.admin}
 
                         />
@@ -271,7 +274,7 @@ class List extends React.Component{
         );
     }
 
-    async clickCheck(itemId, checkVal, checkKey){
+    async clickCheck(itemId, checkVal, checkKey, initials){
         let updatedList = this.props.list;
         updatedList = updatedList.map(item => {
             if(item._id === itemId){
@@ -285,7 +288,7 @@ class List extends React.Component{
         let response = await fetch(`/api/room/${this.props.roomId}/list/${itemId}/check`, {
             method: 'POST',
             headers: getSecretEmployeeHeader([{'Content-Type': 'application/json'}]),
-            body: JSON.stringify({[`${checkKey}`]: checkVal})
+            body: JSON.stringify({change: {[`${checkKey}`]: checkVal}, initials})
         })
         if(response.status === 401) this.props.history.push('/login');
         //fetch updated list

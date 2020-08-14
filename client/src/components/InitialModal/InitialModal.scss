@@ -1,6 +1,6 @@
 @import '../../base_styles/colors.scss';
 
-.confirmModalBlocker{
+.InitialModalBlocker{
     position: fixed;
     width: 100%;
     height: 100%;
@@ -16,21 +16,49 @@
 
     background-color: rgba(255,255,255, .5);
 
-    .confirmModal{
+    .InitialModal{
         @media screen and (min-width: 600px) {
             border: 1px solid black;
         }
-        height: 30%;
-        width: 80%;
         max-width: 500px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        height: auto;
+        width: 100%;
         background-color: rgba(255,255,255, .95);
-        background-color: $orange;
-
         border-radius: 10px;
+
         display: flex;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
         flex-direction: column;
+    }
+
+    .contentWrapper{
+        height: auto;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        padding-bottom: 20px;
+    }
+
+    .initialWrapper{
+        display: flex;
+        width: 90%;
+        flex-direction: column;
+        font-size: x-large;
+        .formError{
+            color: $red;
+            font-size: medium;
+        }
+        .formItem{
+            background-color: #DDDDDD;
+            font-size: x-large;
+            border-radius: 5px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            width:100%;
+        }
     }
 
     .confirmSection{

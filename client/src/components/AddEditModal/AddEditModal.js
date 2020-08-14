@@ -10,14 +10,16 @@ class AddEditModal extends React.Component{
                 invoice: this.props.populate.invoice,
                 address: this.props.populate.address,
                 name: this.props.populate.name,
-                description: this.props.populate.description
+                description: this.props.populate.description,
+                salesID: this.props.populate.salesID
             }
         } else{
             this.state = {
                 invoice: '',
                 address: '',
                 name: '',
-                description: ''
+                description: '',
+                salesID: ''
             }
         }
 
@@ -37,6 +39,12 @@ class AddEditModal extends React.Component{
         let formError = this.state.formError
         if(event.target.value !== '') formError = '';
         this.setState({invoice: event.target.value, formError});
+    }
+
+    handleSalesIDChange(event){
+        let formError = this.state.formError
+        if(event.target.value !== '') formError = '';
+        this.setState({salesID: event.target.value, formError});
     }
 
     handleNameChange(event) {
@@ -72,6 +80,10 @@ class AddEditModal extends React.Component{
             this.setState({formError: 'Description cannot be empty'})
             return;
         }
+        if(this.state.salesID === ''){
+            this.setState({formError: 'SalesID cannot be empty'})
+            return;
+        }
         if(this.state.address === ''){
             this.setState({formError: 'Address cannot be empty'})
             return;
@@ -83,6 +95,7 @@ class AddEditModal extends React.Component{
         
         this.props.addItem({
             name: this.state.name,
+            salesID: this.state.salesID,
             address: this.state.address,
             description: this.state.description,
             invoice: this.state.invoice
@@ -110,6 +123,15 @@ class AddEditModal extends React.Component{
                                         value={this.state.invoice} 
                                         onChange={(e) => this.handleInvoiceChange(e)}
                                         placeholder={'Invoice #'} 
+                                        maxLength={140}
+                                    />
+                                    <label>
+                                        Sales ID
+                                    </label>
+                                    <input className="formItem" type="text" name="salesID" 
+                                        value={this.state.salesID} 
+                                        onChange={(e) => this.handleSalesIDChange(e)}
+                                        placeholder={'Your Sales ID'} 
                                         maxLength={140}
                                     />
                                     <label>

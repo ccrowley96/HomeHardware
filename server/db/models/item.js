@@ -5,6 +5,11 @@ const itemSchema = mongoose.Schema({
         type: String,
         require: false
     },
+    salesID:{
+        type: String,
+        required: true,
+        default: ''
+    },
     name: {
         type: String,
         required: true
@@ -44,6 +49,22 @@ const itemSchema = mongoose.Schema({
     edited: {
         type: Boolean,
         default: false
+    },
+    pickedBy: {
+        type: String,
+        default: '',
+    },
+    dispatchedBy: {
+        type: String,
+        default: '',
+    },
+    completeBy: {
+        type: String,
+        default: '',
+    },
+    cancelledBy: {
+        type: String,
+        default: '',
     }
 });
 
