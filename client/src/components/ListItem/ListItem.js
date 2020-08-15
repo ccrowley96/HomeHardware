@@ -3,8 +3,9 @@ import ConfirmModal from '../ConfirmModal/ConfirmModal';
 import {withRouter} from 'react-router-dom';
 import {GrEdit} from 'react-icons/gr';
 import {AiFillDelete, AiFillCheckCircle} from 'react-icons/ai';
+import {RiTruckLine} from 'react-icons/ri';
 import {MdRadioButtonUnchecked} from 'react-icons/md';
-import {getSecretAdminHeader} from '../../utils/utils';
+import {getSecretAdminHeader, formatTime} from '../../utils/utils';
 import './ListItem.scss';
 import InitialModal from '../InitialModal/InitialModal';
 
@@ -45,6 +46,12 @@ class ListItem extends React.Component{
                         }}
                     /> : null
                 }
+
+                <div className="assignDriver" onClick={() => this.props.openAssignDriver(this.props.item)}>
+                    <div className="assignDriverLabel">Assign</div>
+                    <div className="assignDriverIcon"><RiTruckLine /></div>
+                    {this.props.item.driver && this.props.item.driver != 'unassigned' ? <div className="assignedFlag">(assigned)</div> : null}
+                </div>
                 
                 <div className="listItem">
                     <div className='invoice listContent'>
@@ -65,6 +72,13 @@ class ListItem extends React.Component{
                     <div className='salesID listContent'>
                         <b>Sales ID:</b> &nbsp;{this.props.item.salesID}
                     </div>
+                    <div className='driver listContent'>
+                        <b>Assigned Driver: </b> &nbsp;  {this.props.item.driver}
+                    </div>
+                    {this.props.item.dispatchedAt ?
+                    <div className='dispatchTime listContent'>
+                        <b>{this.props.item.dispatched ? 'Dispatched: ' : 'Dispatch Cancelled: '}</b> &nbsp;{formatTime(this.props.item.dispatchedAt)}
+                    </div> : null} 
                     {this.props.item.edited ?
                     <div className='description listContent'>
                         <b>modified</b> &nbsp; @ &nbsp;{this.props.item.editDate}

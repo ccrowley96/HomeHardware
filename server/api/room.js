@@ -300,6 +300,29 @@ router.put('/:id/list/:item_id', validateEmployee, validateRoom, validateItem, a
     }
 });
 
+// UPDATE assigned driver
+router.put('/:id/driver/:item_id', validateEmployee, validateRoom, validateItem, async (req, res, next) => {
+    let roomId = req.params.id;
+    let itemId = req.params.item_id;
+    
+    if(!req.body.driver){
+        res.status(400);
+        res.send('Incorrect request body (body needs driver)');
+        return;
+    }
+    try{
+        await Room.findOneAndUpdate({'_id': new ObjectId(roomId), 'roomList._id': new ObjectId(itemId)},
+            {$set: {
+                "roomList.$.driver": req.body.driver
+            }}
+        )
+        res.sendStatus(200);
+    } catch(err){
+        console.log(err);
+        res.sendStatus(500);
+    }
+});
+
 //toggle 'checked' on item id
 router.post('/:id/list/:item_id/check', validateEmployee, validateRoom, validateItem, async (req, res, next) => {
     let roomId = req.params.id;
@@ -331,6 +354,18 @@ router.post('/:id/list/:item_id/check', validateEmployee, validateRoom, validate
                 }
             }
         )
+
+        // Update dispatch time (if dispatch being checked)
+        if(checkName === 'dispatched'){
+            await Room.findOneAndUpdate({'_id': new ObjectId(roomId), 'roomList._id': new ObjectId(itemId)},
+                {
+                    $set: {
+                        [`roomList.$.dispatchedAt`]: Date.now()
+                    }
+                }
+            )
+        }
+
         res.sendStatus(200);
     } catch(err){
         console.log(err);

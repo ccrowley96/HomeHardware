@@ -6,6 +6,7 @@ import ListItem from '../ListItem/ListItem';
 import ConfirmModal from '../ConfirmModal/ConfirmModal';
 import AddEditModal from '../AddEditModal/AddEditModal';
 import EditNameModal from '../EditNameModal/EditNameModal';
+import AssignDriverModal from '../AssignDriverModal/AssignDriverModal';
 import {AiOutlinePrinter, AiOutlineDelete, AiOutlineUnorderedList, AiOutlineTag} from 'react-icons/ai'
 import {GrAdd,GrEdit} from 'react-icons/gr';
 import {FiShare} from 'react-icons/fi';
@@ -26,7 +27,8 @@ class List extends React.Component{
             edit: {open: false, data: null},
             editNameOpen: false,
             initialsOpen: false,
-            copied: false
+            copied: false,
+            targetAssignItem: null
         };
         this.hotKeyListener = this.hotKeyListener.bind(this);
         this.checkAfterDelay = this.checkAfterDelay.bind(this);
@@ -36,8 +38,8 @@ class List extends React.Component{
         let addKeyCodes = [65, 32,13];
         let closeKeyCodes = [27];
 
-        let {confirmOpen, addOpen, edit, editNameOpen, initialsOpen} = this.state;
-        let modalOpen = confirmOpen || addOpen || edit.open || editNameOpen || initialsOpen;
+        let {confirmOpen, addOpen, edit, editNameOpen, initialsOpen, assignDriverOpen} = this.state;
+        let modalOpen = confirmOpen || addOpen || edit.open || editNameOpen || initialsOpen || assignDriverOpen;
         if(addKeyCodes.includes(event.keyCode) && !modalOpen){
             event.preventDefault();
             this.setState({addOpen: true})
@@ -83,7 +85,7 @@ class List extends React.Component{
                             initialsOpen={this.state.initialsOpen}
                             clickCheck={(id, checkVal, checkKey, initials) => this.clickCheck(id, checkVal, checkKey, initials)}
                             admin={this.props.admin}
-
+                            openAssignDriver={(item) => this.setState({assignDriverOpen: true, targetAssignItem: item})}
                         />
                     )
                 })
@@ -187,6 +189,20 @@ class List extends React.Component{
                             this.setState({confirmOpen: false});
                         }}
                     /> : null
+                }
+
+                {
+                    this.state.assignDriverOpen ? 
+                    <AssignDriverModal 
+                        triggerClose={() => this.setState({assignDriverOpen: false, targetAssignItem: null})}
+                        context={'Driver Name'}
+                        message={`Assign Driver`}
+                        confirm={(driver) => {
+                            this.setState({assignDriverOpen: false})
+                            this.assignDriver(driver);
+                        }}
+                    />
+                    : null
                 }
 
                 {this.state.edit.open ? 
@@ -333,6 +349,19 @@ class List extends React.Component{
             method: 'DELETE',
             headers: getSecretAdminHeader([{'Content-Type': 'application/json'}])
         });
+        //Update list
+        this.props.fetchNewList();
+    }
+
+    async assignDriver(driver){
+        if(this.state.targetAssignItem && driver){
+            let response = await fetch(`/api/room/${this.props.roomId}/driver/${this.state.targetAssignItem._id}`,{
+                method: 'PUT',
+                headers: getSecretEmployeeHeader([{'Content-Type': 'application/json'}]),
+                body: JSON.stringify({driver})
+            });
+        }
+        this.setState({targetAssignItem: null})
         //Update list
         this.props.fetchNewList();
     }

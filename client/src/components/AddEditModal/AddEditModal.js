@@ -144,7 +144,7 @@ class AddEditModal extends React.Component{
                                         maxLength={140}
                                     />
                                     <label>
-                                        Name
+                                        Customer
                                     </label>
                                     <input className="formItem" type="text" name="name" 
                                         value={this.state.name} 

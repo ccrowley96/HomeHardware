@@ -65,6 +65,14 @@ const itemSchema = mongoose.Schema({
     cancelledBy: {
         type: String,
         default: '',
+    },
+    driver: {
+        type: String,
+        default: 'unassigned'
+    },
+    dispatchedAt: {
+        type: Date,
+        default: null
     }
 });
 
